@@ -1,4 +1,5 @@
-using cine__backend.Models;
+using CinePlus.DataAccess;
+using CinePlus.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace cine__backend
+namespace CinePlus
 {
     public class Startup
     {
@@ -41,19 +42,33 @@ namespace cine__backend
 
             services.AddDbContext<CinePlusDBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("CinePlusContext")));
-            services.AddAuthentication(IdentityConstants.ApplicationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => Configuration.Bind("CookieSettings", options));
+            services.AddAuthentication(IdentityConstants.ApplicationScheme);
             services.AddIdentity<User, IdentityRole>(opts =>
-            {
-                opts.User.RequireUniqueEmail = true;
-                //opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
-                opts.Password.RequiredLength = 8;
-                opts.Password.RequireNonAlphanumeric = false;
-                opts.Password.RequireLowercase = false;
-                opts.Password.RequireUppercase = false;
-                opts.Password.RequireDigit = false;
-            })
+             {
+                 opts.User.RequireUniqueEmail = true;
+                 opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
+                 opts.Password.RequiredLength = 8;
+                 opts.Password.RequireNonAlphanumeric = true;
+                 opts.Password.RequireLowercase = true;
+                 opts.Password.RequireUppercase = true;
+                 opts.Password.RequireDigit = true;
+             })
                 .AddEntityFrameworkStores<CinePlusDBContext>()
                 .AddDefaultTokenProviders();
+            services.ConfigureApplicationCookie(options =>
+             {
+                 options.Cookie.HttpOnly = true;
+                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                 options.SlidingExpiration = true;
+                 options.Events.OnRedirectToLogin = context =>
+                 {
+                     context.Response.Headers["Location"] = context.RedirectUri;
+                     context.Response.StatusCode = 401;
+                     return Task.CompletedTask;
+                 };
+             }
+            );
+            services.AddScoped<IAuthRepository, AuthDataAccess>();
         }
 
         private void AddSwagger(IServiceCollection services)

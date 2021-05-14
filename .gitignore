@@ -1,3 +1,5 @@
 .vs/
-cine+_backend/bin
-cine+_backend/obj
+CinePlus/bin
+CinePlus/obj
+CinePlus.Test/obj
+CinePlus.Test/bin

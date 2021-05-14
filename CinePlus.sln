@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cine+_backend", "cine+_backend\cine+_backend.csproj", "{9F9C005A-B02F-4B57-9DCE-C9EB2B0FEA69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CinePlus", "CinePlus\CinePlus.csproj", "{9F9C005A-B02F-4B57-9DCE-C9EB2B0FEA69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinePlus.Test", "CinePlus.Test\CinePlus.Test.csproj", "{B08FB9B9-AFBA-43CE-9404-58A2E0025566}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{9F9C005A-B02F-4B57-9DCE-C9EB2B0FEA69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F9C005A-B02F-4B57-9DCE-C9EB2B0FEA69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F9C005A-B02F-4B57-9DCE-C9EB2B0FEA69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B08FB9B9-AFBA-43CE-9404-58A2E0025566}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B08FB9B9-AFBA-43CE-9404-58A2E0025566}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B08FB9B9-AFBA-43CE-9404-58A2E0025566}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B08FB9B9-AFBA-43CE-9404-58A2E0025566}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
