@@ -4,14 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CinePlus.Models
+namespace CinePlus.Models.Auth
 {
-    public class RegisterModelRequest
+    public class RegisterManagerModelRequest
     {
-        [Required]
-        [DataType(DataType.Text)]
-        public string role { get; set; }
-
         [Required]
         [DataType(DataType.Text)]
         public string name { get; set; }

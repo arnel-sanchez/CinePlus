@@ -43,7 +43,7 @@ namespace CinePlus.Controllers
                     var user = await UserManager.FindByNameAsync(request.username);
                     if (user != null)
                     {
-                        var result = await SignInManager.PasswordSignInAsync(user, request.password, request.rememberMe, false);
+                        var result = await SignInManager.PasswordSignInAsync(user, request.password, false, false);
                         if (result.Succeeded)
                         {
                             Logger.LogInformation($"El usuario [{request.username}] se ha autenticado en el sistema.");
@@ -67,8 +67,12 @@ namespace CinePlus.Controllers
                     return BadRequest(e.Message);
                 }
             }
-            Logger.LogError("Modelo inválido");
-            return BadRequest("Invalid Model");
+            var a = ModelState.GetEnumerator();
+            a.MoveNext();
+            var error = a.Current.Value.Errors.GetEnumerator();
+            error.MoveNext();
+            Logger.LogError(error.Current.ErrorMessage);
+            return BadRequest(error.Current.ErrorMessage);
         }
 
         [AllowAnonymous]
@@ -105,7 +109,7 @@ namespace CinePlus.Controllers
                             return Ok();
                         }
                     }
-                    else if(request.role == Roles.Client || request.role == Roles.Manager)
+                    else if(request.role == Roles.Client)
                     {
                         var res = await UserManager.CreateAsync(user, request.password);
                         if (res.Succeeded)
@@ -114,6 +118,11 @@ namespace CinePlus.Controllers
                             return Ok();
                         }
                     }
+                    else
+                    {
+                        Logger.LogError($"El usuario [{request.userName}] no se puede registrar como Manager.");
+                        return BadRequest();
+                    }
                 }
                 catch (Exception e)
                 {
@@ -121,8 +130,49 @@ namespace CinePlus.Controllers
                     return BadRequest(e.Message);
                 }
             }
-            Logger.LogError("Modelo Inválido.");
-            return BadRequest("Modelo Inválido.");
+            var a = ModelState.GetEnumerator();
+            a.MoveNext();
+            var error = a.Current.Value.Errors.GetEnumerator();
+            error.MoveNext();
+            Logger.LogError(error.Current.ErrorMessage);
+            return BadRequest(error.Current.ErrorMessage);
+        }
+
+        [Authorize(Roles = Roles.Manager)]
+        [HttpPost("register-manager")]
+        public async Task<IActionResult> RegisterManagerAsync(RegisterModelRequest request)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var user = new User
+                    {
+                        Email = request.email,
+                        LastName = request.lastName,
+                        Name = request.name,
+                        UserName = request.userName,
+                        Role = request.role
+                    };
+                    var res = await UserManager.CreateAsync(user, request.password);
+                    if (res.Succeeded)
+                    {
+                        Logger.LogInformation($"El usuario [{request.userName}] ha sido registrado en el sistema.");
+                        return Ok();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError(e.Message);
+                    return BadRequest(e.Message);
+                }
+            }
+            var a = ModelState.GetEnumerator();
+            a.MoveNext();
+            var error = a.Current.Value.Errors.GetEnumerator();
+            error.MoveNext();
+            Logger.LogError(error.Current.ErrorMessage);
+            return BadRequest(error.Current.ErrorMessage);
         }
 
         [Authorize]
@@ -181,8 +231,12 @@ namespace CinePlus.Controllers
                     return BadRequest(e.Message);
                 }
             }
-            Logger.LogError("Modelo Inválido.");
-            return BadRequest("Invalid Model.");
+            var b = ModelState.GetEnumerator();
+            b.MoveNext();
+            var error = b.Current.Value.Errors.GetEnumerator();
+            error.MoveNext();
+            Logger.LogError(error.Current.ErrorMessage);
+            return BadRequest(error.Current.ErrorMessage);
         }
 
         [Authorize]

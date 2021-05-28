@@ -11,6 +11,10 @@ namespace CinePlus.Models
 
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
+        public string Director { get; set; }
+
         public DateTime DateUpload { get; set; }
         
         public MovieType MovieType { get; set; }

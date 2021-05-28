@@ -8,18 +8,28 @@ namespace CinePlus.Models
 {
     public class EditModelRequest
     {
+        [Required]
+        [DataType(DataType.Text)]
         public string name { get; set; }
 
+        [Required]
+        [DataType(DataType.Text)]
         public string lastName { get; set; }
 
+        [Required]
+        [DataType(DataType.EmailAddress)]
         public string email { get; set; }
 
+        [Required]
+        [DataType(DataType.Text)]
         public string userName { get; set; }
 
         [Required]
+        [DataType(DataType.Password)]
         public string password { get; set; }
 
         [Required]
+        [DataType(DataType.Text)]
         public string userId { get; set; }
     }
 }
