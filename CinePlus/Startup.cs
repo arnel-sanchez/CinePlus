@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,7 @@ namespace CinePlus
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "myCors";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,6 +34,14 @@ namespace CinePlus
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.SetIsOriginAllowed(isOriginAllowed: _ => true).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                });
+            });
             services.AddControllers();
             AddSwagger(services);
             services.Configure<CookiePolicyOptions>(options =>
@@ -46,7 +56,6 @@ namespace CinePlus
             services.AddIdentity<User, IdentityRole>(opts =>
              {
                  opts.User.RequireUniqueEmail = true;
-                 opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
                  opts.Password.RequiredLength = 8;
                  opts.Password.RequireNonAlphanumeric = true;
                  opts.Password.RequireLowercase = true;
@@ -92,6 +101,14 @@ namespace CinePlus
             }
 
             app.UseHttpsRedirection();
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                   ForwardedHeaders.XForwardedProto
+            });
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseRouting();
 
