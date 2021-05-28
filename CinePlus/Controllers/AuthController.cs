@@ -108,6 +108,11 @@ namespace CinePlus.Controllers
                             Logger.LogInformation($"El usuario [{request.userName}] se ha registrado en el sistema.");
                             return Ok();
                         }
+                        else
+                        {
+                            Logger.LogError(res.Errors.ToList()[0].Description);
+                            return BadRequest(res.Errors.ToList()[0].Description);
+                        }
                     }
                     else if(request.role == Roles.Client)
                     {
@@ -116,6 +121,11 @@ namespace CinePlus.Controllers
                         {
                             Logger.LogInformation($"El usuario [{request.userName}] se ha registrado en el sistema.");
                             return Ok();
+                        }
+                        else
+                        {
+                            Logger.LogError(res.Errors.ToList()[0].Description);
+                            return BadRequest(res.Errors.ToList()[0].Description);
                         }
                     }
                     else
@@ -159,6 +169,11 @@ namespace CinePlus.Controllers
                     {
                         Logger.LogInformation($"El usuario [{request.userName}] ha sido registrado en el sistema.");
                         return Ok();
+                    }
+                    else
+                    {
+                        Logger.LogError(res.Errors.ToList()[0].Description);
+                        return BadRequest(res.Errors.ToList()[0].Description);
                     }
                 }
                 catch (Exception e)
