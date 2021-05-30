@@ -1,19 +1,16 @@
 using CinePlus.DataAccess;
 using CinePlus.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using CinePlus.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +20,6 @@ namespace CinePlus
 {
     public class Startup
     {
-        readonly string MyAllowSpecificOrigins = "myCors";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -34,96 +30,76 @@ namespace CinePlus
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy(MyAllowSpecificOrigins,
-                builder =>
-                {
-                    builder.SetIsOriginAllowed(isOriginAllowed: _ => true).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-                });
-            });
-            services.AddControllers();
-            AddSwagger(services);
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
             services.AddDbContext<CinePlusDBContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("CinePlusContext")));
-            services.AddAuthentication(IdentityConstants.ApplicationScheme);
-            services.AddIdentity<User, IdentityRole>(opts =>
-             {
-                 opts.User.RequireUniqueEmail = true;
-                 opts.Password.RequiredLength = 8;
-                 opts.Password.RequireNonAlphanumeric = true;
-                 opts.Password.RequireLowercase = true;
-                 opts.Password.RequireUppercase = true;
-                 opts.Password.RequireDigit = true;
-             })
-                .AddEntityFrameworkStores<CinePlusDBContext>()
-                .AddDefaultTokenProviders();
-            services.ConfigureApplicationCookie(options =>
-             {
-                 options.Cookie.HttpOnly = true;
-                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-                 options.SlidingExpiration = true;
-                 options.Events.OnRedirectToLogin = context =>
-                 {
-                     context.Response.Headers["Location"] = context.RedirectUri;
-                     context.Response.StatusCode = 401;
-                     return Task.CompletedTask;
-                 };
-             }
-            );
-            services.AddScoped<IAuthRepository, AuthDataAccess>();
-        }
-
-        private void AddSwagger(IServiceCollection services)
-        {
-            services.AddSwaggerGen(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<CinePlusDBContext>();
+            services.Configure<IdentityOptions>(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "Cine+ Documentación",
-                    Version = "v1",
-                    Description = "Documentacion de la API de Cine+"
-                });
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
             });
+            services.AddScoped<IAuthRepository, AuthDataAccess>();
+            services.AddScoped<IEmailSender, EmailSender>();
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
+            services.AddControllersWithViews();
+            services.AddRazorPages();
         }
 
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
-
-            app.UseHttpsRedirection();
-
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            else
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor |
-                   ForwardedHeaders.XForwardedProto
-            });
-
-            app.UseCors(MyAllowSpecificOrigins);
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cine+ Documentación v1");
-                c.DocumentTitle = "Cine+ Documentación v1";
-            });
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }

@@ -2,24 +2,30 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>CinePlus</RootNamespace>
+    <UserSecretsId>aspnet-CinePlus-0535FD4B-2026-47B3-9AC9-E27BB1ADA3FE</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5">
+    <None Remove="Areas\Identity\Pages\Account\ForgotPassword.cshtml.cs~RF1a4959ce.TMP" />
+    <None Remove="Areas\Identity\Pages\Account\ForgotPassword.cshtml~RF19c3a00a.TMP" />
+    <None Remove="Areas\Identity\Pages\Account\ForgotPasswordConfirmation.cshtml~RF19c537c1.TMP" />
+    <None Remove="Areas\Identity\Pages\Account\Logout.cshtml~RF19c8e681.TMP" />
+    <None Remove="Areas\Identity\Pages\Account\Register.cshtml~RF16023b57.TMP" />
+    <None Remove="Areas\Identity\Pages\Account\ResetPassword.cshtml~RF1aaa23e1.TMP" />
+    <None Remove="Services\EmailSender.cs~RF1a2270fd.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.15">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.6" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.1.4" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.4" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
   </ItemGroup>
-
 
 </Project>

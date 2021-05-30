@@ -1,0 +1,51 @@
+﻿@page
+@model RegisterManagerModel
+@{
+    ViewData["Title"] = "Registrar Mánager";
+}
+<section style="text-align: center; height:500px; overflow-y: scroll;" class="content">
+	<h1>@ViewData["Title"]</h1>
+
+	<div class="col-sm-3" style="margin-left:37.5%;">
+		<form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+			<h4>Crear una nueva cuenta</h4>
+			<hr />
+			<div asp-validation-summary="All" class="text-danger"></div>
+			<div class="form-group">
+				<label asp-for="Input.Name">Nombre</label>
+				<input asp-for="Input.Name" class="form-control" />
+				<span asp-validation-for="Input.Name" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Input.LastName">Apellidos</label>
+				<input asp-for="Input.LastName" class="form-control" />
+				<span asp-validation-for="Input.LastName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Input.UserName">Nombre de Usuario</label>
+				<input asp-for="Input.UserName" class="form-control" />
+				<span asp-validation-for="Input.UserName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Input.Email">Email</label>
+				<input asp-for="Input.Email" class="form-control" />
+				<span asp-validation-for="Input.Email" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Input.Password">Contraseña</label>
+				<input asp-for="Input.Password" class="form-control" />
+				<span asp-validation-for="Input.Password" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Input.ConfirmPassword">Confirmar Contraseña</label>
+				<input asp-for="Input.ConfirmPassword" class="form-control" />
+				<span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+			</div>
+			<button type="submit" class="btn btn-primary">Registrar</button>
+		</form>
+	</div>
+
+	@section Scripts {
+		<partial name="_ValidationScriptsPartial" />
+	}
+</section>
