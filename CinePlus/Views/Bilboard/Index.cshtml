@@ -1,10 +1,22 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-
-<section style="text-align: center; height:500px; overflow-y: scroll;" class="content">
-	<h1 style="padding: 3%;">Título del Top10</h1>
-	<div class="card-deck">
+﻿
+<section >
+	<div style="text-align:center; padding:3%;">
+		<h1>Carelera del @DateTime.Today.DayOfWeek </h1>
+	</div>
+	<form>
+		<div class="form-row align-items-center">
+			<div class="col-auto">
+				<label class="sr-only" for="inlineFormInputGroup"></label>
+				<div class="input-group mb-2">
+					<input type="date" class="form-control" id="inlineFormInputGroup">
+					<div class="input-group-prepend">
+						<button type="submit" class="btn btn-dark mb-2 rounded-right">Seleccionar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div class="card-deck content" style="text-align: center; height:320px; overflow-y: scroll;">
 		<div class="card">
 			<img class="card-img-top" src="./img/jeans3.jpg" alt="Card image cap">
 			<div class="card-body">

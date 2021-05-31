@@ -1,4 +1,5 @@
-﻿using CinePlus.Models;
+﻿using CinePlus.DataAccess;
+using CinePlus.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,14 +13,17 @@ namespace CinePlus.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IBilboardRepository _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IBilboardRepository context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
+            //var res = _context.GetMoviesOnTop10();
             return View();
         }
 

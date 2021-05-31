@@ -10,6 +10,8 @@ namespace CinePlus.DataAccess
     {
         public void AddMovie(Movie movie);
 
+        public List<MovieOnTop10> GetMoviesOnTop10();
+
         public List<MovieType> GetMovieTypes();
 
         public bool ExistMovieById(string id);

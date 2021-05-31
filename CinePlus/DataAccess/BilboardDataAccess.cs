@@ -16,6 +16,15 @@ namespace CinePlus.DataAccess
             _context = context;
         }
 
+        public List<MovieOnTop10> GetMoviesOnTop10()
+        {
+            return _context.MovieOnTop10
+                .Include(x => x.Movie)
+                .Include(x => x.Top10)
+                .OrderBy(x => x.Top10Id)
+                .ToList();
+        }
+
         public List<MovieType> GetMovieTypes()
         {
             return _context.MovieType.ToList();

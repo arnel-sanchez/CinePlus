@@ -17,7 +17,10 @@
     <None Remove="Areas\Identity\Pages\Account\Register.cshtml~RF16023b57.TMP" />
     <None Remove="Areas\Identity\Pages\Account\ResetPassword.cshtml~RF1aaa23e1.TMP" />
     <None Remove="Services\EmailSender.cs~RF1a2270fd.TMP" />
+    <None Remove="Views\Bilboard\Details.cshtml~RF20327b80.TMP" />
+    <None Remove="Views\Bilboard\Index.cshtml~RF201f08ec.TMP" />
     <None Remove="Views\Shared\_Layout.cshtml~RF1af80b2e.TMP" />
+    <None Remove="Views\Shared\_Layout.cshtml~RF1f71781f.TMP" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +34,15 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
     <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\fonts\customicon\Icons.svg" />
+    <None Include="wwwroot\fonts\fontawesome\fontawesome-webfont.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\ico\" />
   </ItemGroup>
 
 </Project>

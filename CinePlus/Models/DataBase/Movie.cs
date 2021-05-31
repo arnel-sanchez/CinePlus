@@ -20,5 +20,7 @@ namespace CinePlus.Models
         public MovieType MovieType { get; set; }
 
         public string MovieTypeId { get; set; }
+
+        public string URL { get; set; }
     }
 }
