@@ -18,27 +18,24 @@ using CinePlus.DataAccess;
 
 namespace CinePlus.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    [Authorize(Roles = Roles.Manager)]
     public class RegisterManagerModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterManagerModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly IAuthRepository _authRepository;
 
         public RegisterManagerModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterManagerModel> logger,
-            IEmailSender emailSender,
-            IAuthRepository authRepository)
+            IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _authRepository = authRepository;
         }
 
         [BindProperty]

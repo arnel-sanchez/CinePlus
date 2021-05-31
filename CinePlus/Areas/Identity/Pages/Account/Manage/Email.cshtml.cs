@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Logging;
 
 namespace CinePlus.Areas.Identity.Pages.Account.Manage
 {
@@ -19,15 +20,18 @@ namespace CinePlus.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly ILogger<EmailModel> _logger;
 
         public EmailModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ILogger<EmailModel> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _logger = logger;
         }
 
         public string Username { get; set; }
@@ -68,7 +72,8 @@ namespace CinePlus.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                _logger.LogError("No existe usuario con sesión iniciada.");
+                return NotFound("No existe usuario con sesión iniciada.");
             }
 
             await LoadAsync(user);
@@ -80,7 +85,8 @@ namespace CinePlus.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                _logger.LogError("No existe usuario con sesión iniciada.");
+                return NotFound("No existe usuario con sesión iniciada.");
             }
 
             if (!ModelState.IsValid)
@@ -101,14 +107,15 @@ namespace CinePlus.Areas.Identity.Pages.Account.Manage
                     protocol: Request.Scheme);
                 await _emailSender.SendEmailAsync(
                     Input.NewEmail,
-                    "Confirm your email",
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "Confirme su Email",
+                    $"Por favor, confirme su cuenta haciendo click aquí: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Confirmar Email</a>.");
 
-                StatusMessage = "Confirmation link to change email sent. Please check your email.";
+                _logger.LogInformation($"El usuario [{user.UserName}] ha solicitado cambiar su email.");
+                StatusMessage = "Confirmación de Cambio de Email Enviada. Por favor revise su Email.";
                 return RedirectToPage();
             }
-
-            StatusMessage = "Your email is unchanged.";
+            _logger.LogInformation($"El usuario [{user.UserName}] no ha podido cambiar su email.");
+            StatusMessage = "Su Email no se ha podido modificar.";
             return RedirectToPage();
         }
 
@@ -117,7 +124,8 @@ namespace CinePlus.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                _logger.LogError("No existe usuario con sesión iniciada.");
+                return NotFound("No existe usuario con sesión iniciada.");
             }
 
             if (!ModelState.IsValid)
@@ -137,10 +145,11 @@ namespace CinePlus.Areas.Identity.Pages.Account.Manage
                 protocol: Request.Scheme);
             await _emailSender.SendEmailAsync(
                 email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                "Confirme su Email",
+                $"Por favor, confirme su cuenta haciendo click aquí: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Confirmar Email</a>.");
 
-            StatusMessage = "Verification email sent. Please check your email.";
+            _logger.LogInformation($"El usuario [{user.UserName}] ha solicitado cambiar su email.");
+            StatusMessage = "Confirmación de Cambio de Email Enviada. Por favor revise su Email.";
             return RedirectToPage();
         }
     }

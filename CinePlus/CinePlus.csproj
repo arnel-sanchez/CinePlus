@@ -10,9 +10,14 @@
     <None Remove="Areas\Identity\Pages\Account\ForgotPassword.cshtml~RF19c3a00a.TMP" />
     <None Remove="Areas\Identity\Pages\Account\ForgotPasswordConfirmation.cshtml~RF19c537c1.TMP" />
     <None Remove="Areas\Identity\Pages\Account\Logout.cshtml~RF19c8e681.TMP" />
+    <None Remove="Areas\Identity\Pages\Account\Manage\Index.cshtml.cs~RF1ef02119.TMP" />
+    <None Remove="Areas\Identity\Pages\Account\Manage\Index.cshtml~RF1b15187f.TMP" />
+    <None Remove="Areas\Identity\Pages\Account\Manage\ManageNavPages.cs~RF1b1100e3.TMP" />
+    <None Remove="Areas\Identity\Pages\Account\Manage\_Layout.cshtml~RF1b123a7d.TMP" />
     <None Remove="Areas\Identity\Pages\Account\Register.cshtml~RF16023b57.TMP" />
     <None Remove="Areas\Identity\Pages\Account\ResetPassword.cshtml~RF1aaa23e1.TMP" />
     <None Remove="Services\EmailSender.cs~RF1a2270fd.TMP" />
+    <None Remove="Views\Shared\_Layout.cshtml~RF1af80b2e.TMP" />
   </ItemGroup>
 
   <ItemGroup>
