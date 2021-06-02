@@ -1,64 +1,33 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model List<MovieOnTop10>
+@{
+	ViewData["Title"] = "Inicio";
 }
-
+@{ 
+	var top = "";
+} 
 <section style="text-align: center; height:500px; overflow-y: scroll;" class="content">
-	<h1 style="padding: 3%;">Título del Top10</h1>
-	<div class="card-deck">
-		<div class="card">
-			<img class="card-img-top" src="./img/jeans3.jpg" alt="Card image cap">
-			<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-			</div>
-			<div class="card-footer" style="text-align: center;">
-				<a href="#" class="btn btn-dark">Agregar al Carrito</a>
-				<a style="margin-top:2%" asp-action="Details" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
-			</div>
+	@for (int i = 0; i < Model.Count; i++)
+	{
+		@if (top != Model[i].Top10.Name)
+		{
+			<h1 style="padding: 3%;">@Model[i].Top10.Name</h1>
+			top = Model[i].Top10.Name;
+		}
+		<div class="card-deck">
+			@for (; i < Model.Count; i++)
+			{
+				<div class="card">
+					<img class="card-img-top" src=@Model[i].Movie.URL alt="Card image cap">
+					<div class="card-body">
+						<h5 class="card-title">@Model[i].Movie.Name</h5>
+						<p class="card-text">@Model[i].Movie.Description</p>
+					</div>
+					<div class="card-footer" style="text-align: center;">
+						<a asp-action="AddCart" asp-controller="Cart" class="btn btn-dark">Comprar un Boleto</a>
+						<a style="margin-top:2%" asp-action="Details" asp-route-id="@Model[i].MovieId" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
+					</div>
+				</div>
+			}
 		</div>
-		<div class="card">
-			<img class="card-img-top" src="./img/jeans3.jpg" alt="Card image cap">
-			<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-			</div>
-			<div class="card-footer" style="text-align: center;">
-				<a href="#" class="btn btn-dark">Agregar al Carrito</a>
-				<a style="margin-top:2%" asp-action="Details" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
-			</div>
-		</div>
-		<div class="card">
-			<img class="card-img-top" src="./img/jeans3.jpg" alt="Card image cap">
-			<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-			</div>
-			<div class="card-footer" style="text-align: center;">
-				<a href="#" class="btn btn-dark">Agregar al Carrito</a>
-				<a style="margin-top:2%" asp-action="Details" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
-			</div>
-		</div>
-		<div class="card">
-			<img class="card-img-top" src="./img/jeans3.jpg" alt="Card image cap">
-			<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-			</div>
-			<div class="card-footer" style="text-align: center;">
-				<a href="#" class="btn btn-dark">Agregar al Carrito</a>
-				<a style="margin-top:2%" asp-action="Details" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
-			</div>
-		</div>
-		<div class="card">
-			<img class="card-img-top" src="./img/jeans3.jpg" alt="Card image cap">
-			<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-			</div>
-			<div class="card-footer" style="text-align: center;">
-				<a href="#" class="btn btn-dark">Agregar al Carrito</a>
-				<a style="margin-top:2%" asp-action="Details" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
-			</div>
-		</div>
-	</div>
+	}
 </section>

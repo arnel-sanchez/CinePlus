@@ -3,9 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>aspnet-CinePlus-0535FD4B-2026-47B3-9AC9-E27BB1ADA3FE</UserSecretsId>
+    <ApplicationIcon>principal.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.json~RF243c476a.TMP" />
     <None Remove="Areas\Identity\Pages\Account\ForgotPassword.cshtml.cs~RF1a4959ce.TMP" />
     <None Remove="Areas\Identity\Pages\Account\ForgotPassword.cshtml~RF19c3a00a.TMP" />
     <None Remove="Areas\Identity\Pages\Account\ForgotPasswordConfirmation.cshtml~RF19c537c1.TMP" />
@@ -18,6 +20,7 @@
     <None Remove="Areas\Identity\Pages\Account\ResetPassword.cshtml~RF1aaa23e1.TMP" />
     <None Remove="Services\EmailSender.cs~RF1a2270fd.TMP" />
     <None Remove="Views\Bilboard\Details.cshtml~RF20327b80.TMP" />
+    <None Remove="Views\Bilboard\Details.cshtml~RF257c6493.TMP" />
     <None Remove="Views\Bilboard\Index.cshtml~RF201f08ec.TMP" />
     <None Remove="Views\Shared\_Layout.cshtml~RF1af80b2e.TMP" />
     <None Remove="Views\Shared\_Layout.cshtml~RF1f71781f.TMP" />

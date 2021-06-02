@@ -4,14 +4,16 @@ using CinePlus.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CinePlus.Migrations
 {
     [DbContext(typeof(CinePlusDBContext))]
-    partial class CinePlusDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210601152854_Update1")]
+    partial class Update1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,11 +184,16 @@ namespace CinePlus.Migrations
                     b.Property<string>("RoomId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("UserBoughtArmChairId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("ShowId");
 
                     b.HasIndex("MovieId");
 
                     b.HasIndex("RoomId");
+
+                    b.HasIndex("UserBoughtArmChairId");
 
                     b.ToTable("Show");
                 });
@@ -289,9 +296,6 @@ namespace CinePlus.Migrations
                     b.Property<string>("RoomId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ShowId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -300,8 +304,6 @@ namespace CinePlus.Migrations
                     b.HasIndex("ArmChairId");
 
                     b.HasIndex("RoomId");
-
-                    b.HasIndex("ShowId");
 
                     b.HasIndex("UserId");
 
@@ -488,6 +490,10 @@ namespace CinePlus.Migrations
                     b.HasOne("CinePlus.Models.Room", "Room")
                         .WithMany()
                         .HasForeignKey("RoomId");
+
+                    b.HasOne("CinePlus.Models.UserBoughtArmChair", "UserBoughtArmChair")
+                        .WithMany()
+                        .HasForeignKey("UserBoughtArmChairId");
                 });
 
             modelBuilder.Entity("CinePlus.Models.UserBoughtArmChair", b =>
@@ -499,10 +505,6 @@ namespace CinePlus.Migrations
                     b.HasOne("CinePlus.Models.Room", "Room")
                         .WithMany()
                         .HasForeignKey("RoomId");
-
-                    b.HasOne("CinePlus.Models.Show", "Show")
-                        .WithMany()
-                        .HasForeignKey("ShowId");
 
                     b.HasOne("CinePlus.Models.User", "User")
                         .WithMany()

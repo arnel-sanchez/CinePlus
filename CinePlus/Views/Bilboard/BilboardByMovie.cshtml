@@ -1,0 +1,32 @@
+﻿@model ListBilboardResult
+@{
+	ViewData["Title"] = "Cartelera";
+}
+<section>
+	<div style="text-align:center; padding:3%;">
+		<h1>Emisiones de la Película @Model.Title</h1>
+	</div>
+	@for (int i = 0; i < Model.DiscountsByShows.Count; i++)
+	{
+	<div class="card-deck content" style="text-align: center; height:370px; overflow-y: scroll;">
+		@for (; i < Model.DiscountsByShows.Count; i++)
+		{
+			<div class="col-sm-3">
+				<div class="card" style="width: 18rem;">
+					<img class="card-img-top" src=@Model.DiscountsByShows[i].Show.Movie.URL alt="Card image cap">
+					<div class="card-body">
+						<h5 class="card-title">@Model.DiscountsByShows[i].Show.Movie.Name</h5>
+						<p class="card-text">@Model.DiscountsByShows[i].Show.Movie.Description</p>
+						<p class="card-subtitle">Precio: @Model.DiscountsByShows[i].Show.Price $</p>
+						<p class="card-subtitle">fecha y Hora de Emisión: @Model.DiscountsByShows[i].Show.DateTime</p>
+					</div>
+					<div class="card-footer" style="text-align: center;">
+						<a asp-action="AddCart" asp-controller="Cart" class="btn btn-dark">Comprar un Boleto</a>
+						<a asp-action="Details" asp-route-id="@Model.DiscountsByShows[i].Show.MovieId" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
+					</div>
+				</div>
+			</div>
+			}
+		</div>
+	}
+</section>

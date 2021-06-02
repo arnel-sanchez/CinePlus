@@ -13,9 +13,9 @@ namespace CinePlus.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IBilboardRepository _context;
+        private readonly IHomeRepository _context;
 
-        public HomeController(ILogger<HomeController> logger, IBilboardRepository context)
+        public HomeController(ILogger<HomeController> logger, IHomeRepository context)
         {
             _logger = logger;
             _context = context;
@@ -23,8 +23,8 @@ namespace CinePlus.Controllers
 
         public IActionResult Index()
         {
-            //var res = _context.GetMoviesOnTop10();
-            return View();
+            var res = _context.GetMovieOnTop10s();
+            return View(res);
         }
 
         public IActionResult Privacy()

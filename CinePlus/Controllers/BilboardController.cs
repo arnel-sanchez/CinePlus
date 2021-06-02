@@ -13,8 +13,9 @@ namespace CinePlus.Controllers
     public class BilboardController : Controller
     {
         private ILogger<BilboardController> Logger;
-
         private IBilboardRepository BilboardRepository;
+        private static DateTime DateTime = DateTime.Today;
+        private static string Search="";
 
         public BilboardController(ILogger<BilboardController> logger, IBilboardRepository bilboardRepository)
         {
@@ -24,116 +25,70 @@ namespace CinePlus.Controllers
 
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult Details()
-        {
-            return View();
-        }
-
-        [Authorize(Roles = Roles.Manager)]
-        [HttpPost("add-movie")]
-        public IActionResult AddMovie(AddMovieRequest request)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    var movie = new Movie
-                    {
-                        DateUpload = request.Date,
-                        MovieTypeId = request.MovieTypeId,
-                        Name = request.MovieName,
-                        MovieId = Guid.NewGuid().ToString(),
-                        Description = request.Description,
-                        Director = request.Director
-                    };
-                    while (BilboardRepository.ExistMovieById(movie.MovieId))
-                        movie.MovieId = Guid.NewGuid().ToString();
-                    BilboardRepository.AddMovie(movie);
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest(ModelState);
-                }
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
-
-        [Authorize(Roles = Roles.Manager)]
-        [HttpGet("get-type-movie")]
-        public IActionResult GetTypeMovie()
-        {
-            try
-            {
-                var a = BilboardRepository.GetMovieTypes();
-                return Ok(a);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
-        [HttpGet("get-movies")]
-        public IActionResult GetMovies(DateTime date)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var a = BilboardRepository.GetShowByDate(date);
-                    return Ok(a);
-                }
-                catch (Exception e)
-                {
-                    return BadRequest(e.Message);
-                }
-            }
+            var title = "";
+            if (DateTime.DayOfWeek.ToString() == "Monday")
+                title += "Lunes";
+            else if (DateTime.DayOfWeek.ToString() == "Tuesday")
+                title += "Martes";
+            else if (DateTime.DayOfWeek.ToString() == "Wednesday")
+                title += "Miércoles";
+            else if (DateTime.DayOfWeek.ToString() == "Thursday")
+                title += "Jueves";
+            else if (DateTime.DayOfWeek.ToString() == "Friday")
+                title += "Viernes";
+            else if (DateTime.DayOfWeek.ToString() == "Saturday")
+                title += "Sábado";
+            else if (DateTime.DayOfWeek.ToString() == "Sunday")
+                title += "Domingo";
+            title += " " + DateTime.Day + "/" + DateTime.Month + "/" + DateTime.Year;
+            string date = DateTime.Year.ToString()+"-";
+            if (DateTime.Month < 10)
+                date += "0" + DateTime.Month + "-";
             else
+                date += DateTime.Month + "-";
+            if (DateTime.Day < 10)
+                date += "0" + DateTime.Day;
+            else
+                date += DateTime.Day;
+            var res = new ListBilboardResult
             {
-                return BadRequest("Modelo inválido");
-            }
+                DiscountsByShows = BilboardRepository.GetShowByDate(DateTime),
+                Title = title,
+                Date = date
+            };
+            return View(res);
         }
 
-        [Authorize(Roles = Roles.Manager)]
-        [HttpPost("add-show")]
-        public IActionResult AddShows()
+        public IActionResult Details(string id)
         {
-            return Ok();
+            if (id == "" || id == null)
+                return NotFound();
+            var movie = BilboardRepository.GetMovieById(id);
+            if (movie == null)
+                return NotFound();
+            return View(movie);
         }
 
-        [Authorize(Roles = Roles.Manager)]
-        [HttpPost("add-room")]
-        public IActionResult AddRoom()
+        public IActionResult SearchMovie(string search)
         {
-            return Ok();
+            Search = search;
+            return RedirectToAction("BilboardByMovie");
         }
 
-        [Authorize(Roles = Roles.Manager)]
-        [HttpPost("add-discount")]
-        public IActionResult AddDiscount()
+        public IActionResult SelectDate(DateTime date)
         {
-            return Ok();
+            DateTime = date;
+            return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = Roles.Manager)]
-        [HttpPost("add-Top10")]
-        public IActionResult AddTop10()
+        public IActionResult BilboardByMovie()
         {
-            return Ok();
-        }
-
-        [Authorize(Roles = Roles.Manager)]
-        [HttpPost("add-armachair")]
-        public IActionResult AddArmChair()
-        {
-            return Ok();
+            var res = new ListBilboardResult
+            {
+                DiscountsByShows = BilboardRepository.GetShowByMovieName(Search),
+                Title = Search
+            };
+            return View(res);
         }
     }
 }

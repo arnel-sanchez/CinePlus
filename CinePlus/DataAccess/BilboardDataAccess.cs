@@ -43,12 +43,46 @@ namespace CinePlus.DataAccess
 
         public List<DiscountsByShow> GetShowByDate(DateTime date)
         {
-            return _context.DiscountsByShow
-                .Include(x=>x.Show)
-                .Include(x=>x.Discount)
-                .Include(x=>x.Show.Movie)
-                .Include(x=>x.Show.Room)
-                .Where(x=>x.Show.DateTime.Date == date.Date).ToList();
+            try
+            {
+                return _context.DiscountsByShow
+                    .Include(x => x.Show)
+                    .Include(x => x.Discount)
+                    .Include(x => x.Show.Movie)
+                    .Include(x => x.Show.Room)
+                    .Where(x => x.Show.DateTime.Year == date.Date.Year && x.Show.DateTime.Month == date.Month && x.Show.DateTime.Day == date.Day)
+                    .ToList();
+            }
+            catch (Exception)
+            {
+                return new List<DiscountsByShow>();
+            }
+        }
+
+        public Movie GetMovieById(string id)
+        {
+            return _context.Movie
+                .Include(x => x.MovieType)
+                .Where(x => x.MovieId == id)
+                .FirstOrDefault();
+        }
+
+        public List<DiscountsByShow> GetShowByMovieName(string name)
+        {
+            try
+            {
+                return _context.DiscountsByShow
+                    .Include(x => x.Show)
+                    .Include(x => x.Discount)
+                    .Include(x => x.Show.Movie)
+                    .Include(x => x.Show.Room)
+                    .Where(x=>x.Show.Movie.Name.Contains(name) || x.Show.Movie.Name==name)
+                    .ToList();
+            }
+            catch (Exception)
+            {
+                return new List<DiscountsByShow>();
+            }
         }
     }
 }

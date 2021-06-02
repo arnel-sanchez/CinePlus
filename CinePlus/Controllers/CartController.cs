@@ -12,5 +12,10 @@ namespace CinePlus.Controllers
         {
             return View();
         }
+
+        public IActionResult AddCart()
+        {
+            return View();
+        }
     }
 }

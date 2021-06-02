@@ -20,5 +20,9 @@ namespace CinePlus.Models
         public Room Room { get; set; }
 
         public string RoomId { get; set; }
+
+        public Show Show { get; set; }
+
+        public string ShowId { get; set; }
     }
 }

@@ -115,6 +115,7 @@ namespace CinePlus.Areas.Identity.Pages.Account
                         };
                         _authRepository.CreatePartner(partner);
                     }
+                    await _userManager.AddToRoleAsync(user, role);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

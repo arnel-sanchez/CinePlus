@@ -35,6 +35,8 @@ namespace CinePlus
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddDefaultTokenProviders()
+                .AddRoles<IdentityRole>()
+                .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddEntityFrameworkStores<CinePlusDBContext>();
             services.Configure<IdentityOptions>(options =>
             {
@@ -56,7 +58,7 @@ namespace CinePlus
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
-            services.AddScoped<IAuthRepository, AuthDataAccess>();
+            services.AddScoped<IHomeRepository, HomeDataAccess>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IBilboardRepository,BilboardDataAccess>();
             services.ConfigureApplicationCookie(options =>
@@ -74,7 +76,7 @@ namespace CinePlus
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -102,6 +104,10 @@ namespace CinePlus
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+            SeedData.AddRoles(serviceProvider, Configuration).Wait();
+            SeedData.CreateManagerAccount(serviceProvider, Configuration).Wait();
+            SeedData.CreateClientAndPartnerAccount(serviceProvider, Configuration).Wait();
+            SeedData.SeedDataBase(serviceProvider);
         }
     }
 }

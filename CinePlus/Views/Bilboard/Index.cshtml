@@ -1,14 +1,17 @@
-﻿
-<section >
+﻿@model ListBilboardResult
+@{
+	ViewData["Title"] = "Cartelera";
+}
+<section>
 	<div style="text-align:center; padding:3%;">
-		<h1>Carelera del @DateTime.Today.DayOfWeek </h1>
+		<h1>Carelera del @Model.Title</h1>
 	</div>
-	<form>
+	<form asp-controller="Bilboard" asp-action="SelectDate">
 		<div class="form-row align-items-center">
 			<div class="col-auto">
 				<label class="sr-only" for="inlineFormInputGroup"></label>
 				<div class="input-group mb-2">
-					<input type="date" class="form-control" id="inlineFormInputGroup">
+					<input type="date" name="date" class="form-control" id="inlineFormInputGroup" value=@Model.Date>
 					<div class="input-group-prepend">
 						<button type="submit" class="btn btn-dark mb-2 rounded-right">Seleccionar</button>
 					</div>
@@ -16,61 +19,25 @@
 			</div>
 		</div>
 	</form>
-	<div class="card-deck content" style="text-align: center; height:320px; overflow-y: scroll;">
-		<div class="card">
-			<img class="card-img-top" src="./img/jeans3.jpg" alt="Card image cap">
-			<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-			</div>
-			<div class="card-footer" style="text-align: center;">
-				<a href="#" class="btn btn-dark">Agregar al Carrito</a>
-				<a style="margin-top:2%" asp-action="Details" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
-			</div>
+	@for (int i = 0; i < Model.DiscountsByShows.Count; i++)
+	{
+		<div class="card-deck">
+			@for (; i < Model.DiscountsByShows.Count; i++)
+			{
+				<div class="card">
+					<img class="card-img-top" src=@Model.DiscountsByShows[i].Show.Movie.URL alt="Card image cap">
+					<div class="card-body">
+						<h5 class="card-title">@Model.DiscountsByShows[i].Show.Movie.Name</h5>
+						<p class="card-text">@Model.DiscountsByShows[i].Show.Movie.Description</p>
+						<p class="card-subtitle">Precio: @Model.DiscountsByShows[i].Show.Price $</p>
+						<p class="card-subtitle">Emisión: @Model.DiscountsByShows[i].Show.DateTime.Hour:@Model.DiscountsByShows[i].Show.DateTime.Minute:@Model.DiscountsByShows[i].Show.DateTime.Second</p>
+					</div>
+					<div class="card-footer" style="text-align: center;">
+						<a asp-action="AddCart" asp-controller="Cart" class="btn btn-dark">Comprar un Boleto</a>
+						<a style="margin-top:2%" asp-action="Details" asp-route-id="@Model.DiscountsByShows[i].Show.MovieId" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
+					</div>
+				</div>
+			}
 		</div>
-		<div class="card">
-			<img class="card-img-top" src="./img/jeans3.jpg" alt="Card image cap">
-			<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-			</div>
-			<div class="card-footer" style="text-align: center;">
-				<a href="#" class="btn btn-dark">Agregar al Carrito</a>
-				<a style="margin-top:2%" asp-action="Details" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
-			</div>
-		</div>
-		<div class="card">
-			<img class="card-img-top" src="./img/jeans3.jpg" alt="Card image cap">
-			<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-			</div>
-			<div class="card-footer" style="text-align: center;">
-				<a href="#" class="btn btn-dark">Agregar al Carrito</a>
-				<a style="margin-top:2%" asp-action="Details" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
-			</div>
-		</div>
-		<div class="card">
-			<img class="card-img-top" src="./img/jeans3.jpg" alt="Card image cap">
-			<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-			</div>
-			<div class="card-footer" style="text-align: center;">
-				<a href="#" class="btn btn-dark">Agregar al Carrito</a>
-				<a style="margin-top:2%" asp-action="Details" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
-			</div>
-		</div>
-		<div class="card">
-			<img class="card-img-top" src="./img/jeans3.jpg" alt="Card image cap">
-			<div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-			</div>
-			<div class="card-footer" style="text-align: center;">
-				<a href="#" class="btn btn-dark">Agregar al Carrito</a>
-				<a style="margin-top:2%" asp-action="Details" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
-			</div>
-		</div>
-	</div>
+	}
 </section>
