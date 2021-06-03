@@ -38,5 +38,7 @@ namespace CinePlus.Models
         public DbSet<Cart> Carts { get; set; }
 
         public DbSet<ArmChairByRoom> ArmChairByRoom { get; set; }
+
+        public DbSet<Pay> Pay { get; set; }
     }
 }

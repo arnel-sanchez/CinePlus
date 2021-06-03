@@ -23,8 +23,9 @@ namespace CinePlus.Areas.Identity.Pages.Account
             _logger = logger;
         }
 
-        public void OnGet()
+        public async Task<IActionResult> OnGet()
         {
+            return await OnPost();
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
@@ -38,7 +39,7 @@ namespace CinePlus.Areas.Identity.Pages.Account
             }
             else
             {
-                return RedirectToPage();
+                return RedirectToAction("Index");
             }
         }
     }

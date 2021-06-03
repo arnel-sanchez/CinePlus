@@ -45,6 +45,11 @@ namespace CinePlus.DataAccess
             return _context.Carts.Where(x => x.UserId == userId).Count();
         }
 
+        public List<DiscountsByShow> GetDiscountByShowId(string id)
+        {
+            return _context.DiscountsByShow.Include(x => x.Discount).Where(x => x.ShowId == id).ToList();
+        }
+
         public Show GetShowById(string id)
         {
             return _context.Show

@@ -7,9 +7,7 @@
 		<h1>Carrito de Compras</h1>
 	</div>
 	<div>
-		<form style="padding:1%; padding-left: 80%">
-			<button class="btn btn-dark" type="submit">Efectuar Compra</button>
-		</form>
+		<button style="margin:1%; margin-left: 80%" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal">Efectuar Compra</button>
 	</div>
 	<div class="card-deck content" style="text-align: center; height:320px; overflow-y: scroll;">
 		@foreach (var item in Model)
@@ -31,5 +29,100 @@
 				</div>
 			</div>
 		}
-			</div>
+	</div>
 </section>
+@if (User.IsInRole(Roles.Partner))
+{
+	<div class="modal fade" id="exampleModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Pago con Puntos</h5>
+					<button type="button" class="btn icon-remove-circle icon-2x" data-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					Puede pagar las entradas con puntos de socio o con dinero, tiene la libertad de escoger.
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button class="btn btn-dark" data-target="#exampleModalToggle2" data-toggle="modal" data-dismiss="modal">Pagar con Dinero</button>
+					<a asp-action="" asp-controller="" asp-route-id="" class="btn btn-dark">Pagar con Puntos de Socio</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Pago</h5>
+					<button type="button" class="btn icon-remove-circle icon-2x" data-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form asp-action="PayTicket" asp-controller="Cart">
+					<div class="modal-body">
+
+						<div class="mb-3">
+							<label class="col-form-label">Inserte la Tarjeta</label>
+							<input type="number" class="form-control" name="Card1" />
+						</div>
+						<div class="mb-3">
+							<label class="col-form-label">Nombre y Apellidos</label>
+							<input type="text" class="form-control" name="Name">
+						</div>
+						<div class="mb-3">
+							<label class="col-form-label">Código de Acceso</label>
+							<input type="number" class="form-control" name="Code">
+						</div>
+						<div class="mb-3">
+							<label class="col-form-label">Fecha de Expiración</label>
+							<input type="date" class="form-control" name="Date">
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+						<button class="btn btn-dark" data-target="#exampleModal" data-toggle="modal" data-dismiss="modal">Pagar con Puntos de Socio</button>
+						<button type="submit" class="btn btn-dark">Pagar con Dinero</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+}
+else
+{
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Pago</h5>
+					<button type="button" class="btn icon-remove-circle icon-2x" data-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form asp-action="PayTicket" asp-controller="Cart">
+					<div class="modal-body">
+
+						<div class="mb-3">
+							<label class="col-form-label">Inserte la Tarjeta</label>
+							<input type="number" class="form-control" name="Card1" />
+						</div>
+						<div class="mb-3">
+							<label class="col-form-label">Nombre y Apellidos</label>
+							<input type="text" class="form-control" name="Name">
+						</div>
+						<div class="mb-3">
+							<label class="col-form-label">Código de Acceso</label>
+							<input type="number" class="form-control" name="Code">
+						</div>
+						<div class="mb-3">
+							<label class="col-form-label">Fecha de Expiración</label>
+							<input type="date" class="form-control" name="Date">
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+						<button type="submit" class="btn btn-dark">Pagar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+}

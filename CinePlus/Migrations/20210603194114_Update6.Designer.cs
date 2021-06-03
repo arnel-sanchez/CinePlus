@@ -4,14 +4,16 @@ using CinePlus.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CinePlus.Migrations
 {
     [DbContext(typeof(CinePlusDBContext))]
-    partial class CinePlusDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210603194114_Update6")]
+    partial class Update6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,7 +66,7 @@ namespace CinePlus.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("DiscountId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ShowId")
                         .HasColumnType("nvarchar(450)");
@@ -75,6 +77,8 @@ namespace CinePlus.Migrations
                     b.HasKey("CartId");
 
                     b.HasIndex("ArmChairId");
+
+                    b.HasIndex("DiscountId");
 
                     b.HasIndex("ShowId");
 
@@ -214,6 +218,9 @@ namespace CinePlus.Migrations
                     b.Property<string>("DiscountById")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DiscountId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Identifier")
                         .HasColumnType("nvarchar(max)");
 
@@ -230,6 +237,8 @@ namespace CinePlus.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("PayId");
+
+                    b.HasIndex("DiscountId");
 
                     b.HasIndex("UserBoughtArmChairId");
 
@@ -544,6 +553,10 @@ namespace CinePlus.Migrations
                         .WithMany()
                         .HasForeignKey("ArmChairId");
 
+                    b.HasOne("CinePlus.Models.Discount", "Discount")
+                        .WithMany()
+                        .HasForeignKey("DiscountId");
+
                     b.HasOne("CinePlus.Models.Show", "Show")
                         .WithMany()
                         .HasForeignKey("ShowId");
@@ -591,6 +604,10 @@ namespace CinePlus.Migrations
 
             modelBuilder.Entity("CinePlus.Models.Pay", b =>
                 {
+                    b.HasOne("CinePlus.Models.Discount", "Discount")
+                        .WithMany()
+                        .HasForeignKey("DiscountId");
+
                     b.HasOne("CinePlus.Models.UserBoughtArmChair", "UserBoughtArmChair")
                         .WithMany()
                         .HasForeignKey("UserBoughtArmChairId");

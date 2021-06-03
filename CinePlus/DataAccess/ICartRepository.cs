@@ -19,5 +19,7 @@ namespace CinePlus.DataAccess
         public List<Cart> GetCartByUserId(string id);
 
         public void DeleteCartById(string id);
+
+        public List<DiscountsByShow> GetDiscountByShowId(string id);
     }
 }

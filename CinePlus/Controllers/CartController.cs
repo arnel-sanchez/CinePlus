@@ -42,11 +42,21 @@ namespace CinePlus.Controllers
             return View(res);
         }
 
-        [Authorize]
         [Route("/Cart/AddArmChair",Name = "addCart")]
         public IActionResult AddArmChair(string armChairId, string showId)
         {
             if(armChairId=="" || armChairId==null || showId=="" || showId==null)
+            {
+                return NotFound();
+            }
+            var discounts = CartRepository.GetDiscountByShowId(showId);
+            return View("SelectDiscount", new Tuple<string, string, List<DiscountsByShow>>(armChairId, showId, discounts));
+        }
+
+        [Authorize]
+        public IActionResult SelectDiscount(string armChairId, string showId, string discountId)
+        {
+            if (armChairId == "" || armChairId == null || showId == "" || showId == null || discountId == "" || discountId == null)
             {
                 return NotFound();
             }
@@ -55,10 +65,11 @@ namespace CinePlus.Controllers
                 ArmChairId = armChairId,
                 CartId = Guid.NewGuid().ToString(),
                 ShowId = showId,
-                User = UserManager.FindByNameAsync(User.Identity.Name).Result
+                User = UserManager.FindByNameAsync(User.Identity.Name).Result,
+                DiscountId = discountId
             };
             CartRepository.AddCart(cart);
-            return RedirectToAction("SelectArmChair", new Dictionary<string, string> { { "id", showId} });
+            return RedirectToAction("SelectArmChair", new Dictionary<string, string> { { "id", showId } });
         }
 
         [Authorize]
@@ -69,6 +80,13 @@ namespace CinePlus.Controllers
                 return NotFound();
             }
             CartRepository.DeleteCartById(id);
+            return RedirectToAction("Index");
+        }
+        
+        [Authorize]
+        [HttpPost]
+        public IActionResult PayTicket(PayTicketRequest request)
+        {
             return RedirectToAction("Index");
         }
     }

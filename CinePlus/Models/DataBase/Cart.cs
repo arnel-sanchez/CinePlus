@@ -20,5 +20,7 @@ namespace CinePlus.Models
         public string ArmChairId { get; set; }
 
         public ArmChair ArmChair { get; set; }
+
+        public string DiscountId { get; set; }
     }
 }
