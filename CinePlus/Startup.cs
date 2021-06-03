@@ -61,6 +61,7 @@ namespace CinePlus
             services.AddScoped<IHomeRepository, HomeDataAccess>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IBilboardRepository,BilboardDataAccess>();
+            services.AddScoped<ICartRepository, CartDataAccess>();
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings

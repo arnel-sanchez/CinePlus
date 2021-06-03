@@ -52,7 +52,8 @@ namespace CinePlus.Controllers
                 date += DateTime.Day;
             var res = new ListBilboardResult
             {
-                DiscountsByShows = BilboardRepository.GetShowByDate(DateTime),
+                Shows = BilboardRepository.GetShowByDate(DateTime),
+                DiscountsByShows = BilboardRepository.GetDiscounts(DateTime),
                 Title = title,
                 Date = date
             };
@@ -85,8 +86,9 @@ namespace CinePlus.Controllers
         {
             var res = new ListBilboardResult
             {
-                DiscountsByShows = BilboardRepository.GetShowByMovieName(Search),
-                Title = Search
+                Shows = BilboardRepository.GetShowByMovieName(Search),
+                Title = Search,
+                DiscountsByShows = BilboardRepository.GetDiscounts(Search)
             };
             return View(res);
         }

@@ -41,21 +41,19 @@ namespace CinePlus.DataAccess
             return _context.Movie.Select(x => x.MovieId == id).FirstOrDefault();
         }
 
-        public List<DiscountsByShow> GetShowByDate(DateTime date)
+        public List<Show> GetShowByDate(DateTime date)
         {
             try
             {
-                return _context.DiscountsByShow
-                    .Include(x => x.Show)
-                    .Include(x => x.Discount)
-                    .Include(x => x.Show.Movie)
-                    .Include(x => x.Show.Room)
-                    .Where(x => x.Show.DateTime.Year == date.Date.Year && x.Show.DateTime.Month == date.Month && x.Show.DateTime.Day == date.Day)
+                return _context.Show
+                    .Include(x => x.Movie)
+                    .Include(x => x.Room)
+                    .Where(x => x.DateTime.Year == date.Date.Year && x.DateTime.Month == date.Month && x.DateTime.Day == date.Day)
                     .ToList();
             }
             catch (Exception)
             {
-                return new List<DiscountsByShow>();
+                return new List<Show>();
             }
         }
 
@@ -67,16 +65,44 @@ namespace CinePlus.DataAccess
                 .FirstOrDefault();
         }
 
-        public List<DiscountsByShow> GetShowByMovieName(string name)
+        public List<Show> GetShowByMovieName(string name)
+        {
+            try
+            {
+                return _context.Show
+                    .Include(x => x.Movie)
+                    .Include(x => x.Room)
+                    .Where(x=>x.Movie.Name.Contains(name) || x.Movie.Name==name)
+                    .ToList();
+            }
+            catch (Exception)
+            {
+                return new List<Show>();
+            }
+        }
+
+        public List<DiscountsByShow> GetDiscounts(string name)
         {
             try
             {
                 return _context.DiscountsByShow
-                    .Include(x => x.Show)
                     .Include(x => x.Discount)
-                    .Include(x => x.Show.Movie)
-                    .Include(x => x.Show.Room)
-                    .Where(x=>x.Show.Movie.Name.Contains(name) || x.Show.Movie.Name==name)
+                    .Where(x => x.Show.Movie.Name.Contains(name) || x.Show.Movie.Name == name)
+                    .ToList();
+            }
+            catch (Exception)
+            {
+                return new List<DiscountsByShow>();
+            }
+        }
+
+        public List<DiscountsByShow> GetDiscounts(DateTime date)
+        {
+            try
+            {
+                return _context.DiscountsByShow
+                    .Include(x=>x.Discount)
+                    .Where(x => x.Show.DateTime.Year == date.Date.Year && x.Show.DateTime.Month == date.Month && x.Show.DateTime.Day == date.Day)
                     .ToList();
             }
             catch (Exception)

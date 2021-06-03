@@ -11,6 +11,8 @@ namespace CinePlus.Models
 
         public string Date { get; set; }
 
+        public List<Show> Shows { get; set; }
+
         public List<DiscountsByShow> DiscountsByShows { get; set; }
     }
 }

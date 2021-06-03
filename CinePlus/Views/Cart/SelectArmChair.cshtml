@@ -1,0 +1,51 @@
+﻿@model SelectArmChairResult
+@{
+	ViewData["Title"] = "Selecciona los Asientos a Comprar";
+}
+<section style="text-align: center; height:500px; overflow-y: scroll;" class="content">
+	<h1 style="padding: 3%;">Asientos de la Sala @Model.Show.Room.Name</h1>
+	<h3 style="padding-bottom: 3%;">Cada asiento vale $@Model.Show.Price.</h3>
+	<div class="card-deck">
+		@for (int i = 0; i < Model.ArmChairByRooms.Count; i++)
+		{
+			if (Model.ArmChairByRooms[i].ArmChair.StateArmChair == StateArmChair.sold)
+			{
+				<div style="position: relative; width: 6rem;">
+					<img src="~/img/armchair.png" style="width: 6rem;" />
+					<div style="position: absolute; top: 0px; left: 0px; width: 0; height: 0; border-top: 100px solid transparent; border-right: 100px solid transparent;">
+						<div style="color: black; position: relative; top: -70px; left: 15px; font-weight: bold; padding: 5px; transform: rotate(-45deg);">
+							Ocupado
+						</div>
+					</div>
+					<h6>@(i + 1)</h6>
+				</div>
+			}
+			else if (Model.ArmChairByRooms[i].ArmChair.StateArmChair == StateArmChair.broken)
+			{
+				<div style="position: relative; width: 6rem;">
+					<img src="~/img/armchair.png" style="width: 6rem;" />
+					<div style="position: absolute; top: 0px; left: 0px; width: 0; height: 0; border-top: 100px solid transparent; border-right: 100px solid transparent;">
+						<div style="color: black; position: relative; top: -70px; left: 15px; font-weight: bold; padding: 5px; transform: rotate(-45deg);">
+							Roto
+						</div>
+					</div>
+					<h6>@(i + 1)</h6>
+				</div>
+			}
+			else
+			{
+				var parms = new Dictionary<string, string>
+			{
+					{ "armChairId", Model.ArmChairByRooms[i].ArmChairId },
+					{ "showId", Model.Show.ShowId }
+				};
+				<div>
+					<a style="width: 6rem;" asp-route="addCart" asp-all-route-data="parms">
+						<img src="~/img/armchair.png" style="width: 6rem;" />
+					</a>
+					<h6>@(i+1)</h6>
+				</div>
+			}
+		}
+	</div>
+</section>

@@ -18,10 +18,12 @@
     <None Remove="Areas\Identity\Pages\Account\Manage\_Layout.cshtml~RF1b123a7d.TMP" />
     <None Remove="Areas\Identity\Pages\Account\Register.cshtml~RF16023b57.TMP" />
     <None Remove="Areas\Identity\Pages\Account\ResetPassword.cshtml~RF1aaa23e1.TMP" />
+    <None Remove="Controllers\BilboardController.cs~RF2eb27704.TMP" />
     <None Remove="Services\EmailSender.cs~RF1a2270fd.TMP" />
     <None Remove="Views\Bilboard\Details.cshtml~RF20327b80.TMP" />
     <None Remove="Views\Bilboard\Details.cshtml~RF257c6493.TMP" />
     <None Remove="Views\Bilboard\Index.cshtml~RF201f08ec.TMP" />
+    <None Remove="Views\Cart\Index.cshtml~RF2e9a7d33.TMP" />
     <None Remove="Views\Shared\_Layout.cshtml~RF1af80b2e.TMP" />
     <None Remove="Views\Shared\_Layout.cshtml~RF1f71781f.TMP" />
   </ItemGroup>

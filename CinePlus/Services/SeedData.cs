@@ -325,8 +325,34 @@ namespace CinePlus.Services
                 var room = new Room
                 {
                     RoomId = Guid.NewGuid().ToString(),
+                    Name = "Principal",
                     NoArmChairs = 200
                 };
+                for (int i = 0; i < 200; i++)
+                {
+                    string id = "";
+                    if (i + 1 < 10)
+                        id = "00" + (i+1).ToString();
+                    else if (i + 1 < 100)
+                        id = "0" + (i+i).ToString();
+                    var armChair = new ArmChair
+                    {
+                        ArmChairId = id+"-"+Guid.NewGuid().ToString(),
+                        No = (i+1).ToString(),
+                        StateArmChair = StateArmChair.ready,
+                    };
+                    var armChairByRoom = new ArmChairByRoom
+                    {
+                        ArmChair = armChair,
+                        ArmChairByRoomId = Guid.NewGuid().ToString(),
+                        ArmChairId = armChair.ArmChairId,
+                        Room = room,
+                        RoomId = room.RoomId
+                    };
+                    context.ArmChair.Add(armChair);
+                    context.ArmChairByRoom.Add(armChairByRoom);
+                    context.SaveChanges();
+                }
                 var discount = new Discount
                 {
                     DiscountId = Guid.NewGuid().ToString(),
@@ -353,7 +379,6 @@ namespace CinePlus.Services
                 };
                 
                 context.Discount.Add(discount);
-                context.Room.Add(room);
                 context.Show.Add(show);
                 context.DiscountsByShow.Add(discountByShow);
                 context.SaveChanges();

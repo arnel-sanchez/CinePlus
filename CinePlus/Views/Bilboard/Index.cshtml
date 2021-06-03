@@ -19,25 +19,30 @@
 			</div>
 		</div>
 	</form>
-	@for (int i = 0; i < Model.DiscountsByShows.Count; i++)
-	{
-		<div class="card-deck">
-			@for (; i < Model.DiscountsByShows.Count; i++)
-			{
-				<div class="card">
-					<img class="card-img-top" src=@Model.DiscountsByShows[i].Show.Movie.URL alt="Card image cap">
-					<div class="card-body">
-						<h5 class="card-title">@Model.DiscountsByShows[i].Show.Movie.Name</h5>
-						<p class="card-text">@Model.DiscountsByShows[i].Show.Movie.Description</p>
-						<p class="card-subtitle">Precio: @Model.DiscountsByShows[i].Show.Price $</p>
-						<p class="card-subtitle">Emisión: @Model.DiscountsByShows[i].Show.DateTime.Hour:@Model.DiscountsByShows[i].Show.DateTime.Minute:@Model.DiscountsByShows[i].Show.DateTime.Second</p>
-					</div>
-					<div class="card-footer" style="text-align: center;">
-						<a asp-action="AddCart" asp-controller="Cart" class="btn btn-dark">Comprar un Boleto</a>
-						<a style="margin-top:2%" asp-action="Details" asp-route-id="@Model.DiscountsByShows[i].Show.MovieId" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
-					</div>
+	<div class="card-deck">
+		@for (int i=0; i < Model.Shows.Count; i++)
+		{
+			<div class="card">
+				<img class="card-img-top" src=@Model.Shows[i].Movie.URL alt="Card image cap">
+				<div class="card-body">
+					<h5 class="card-title">@Model.Shows[i].Movie.Name</h5>
+					<p class="card-text">@Model.Shows[i].Movie.Description</p>
+					<p class="card-subtitle">Sala: @Model.Shows[i].Room.Name</p>
+					<p class="card-subtitle">Precio: $@Model.Shows[i].Price</p>
+					<p class="card-subtitle">Fecha y Hora de Emisión: @Model.Shows[i].DateTime</p>
+					@foreach (var item in Model.DiscountsByShows)
+					{
+						if (item.ShowId == Model.Shows[i].ShowId)
+						{
+							<p class="card-subtitle alert-success" style="margin:2%;"> Descuento @item.Discount.Name del @item.Discount.Percent% </p>
+						}
+					}
 				</div>
-			}
-		</div>
-	}
+				<div class="card-footer" style="text-align: center;">
+					<a asp-action="SelectArmChair" asp-controller="Cart" asp-route-id="@Model.Shows[i].ShowId" class="btn btn-dark">Comprar un Boleto</a>
+					<a style="margin-top:2%" asp-action="Details" asp-route-id="@Model.Shows[i].MovieId" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
+				</div>
+			</div>
+		}
+	</div>
 </section>

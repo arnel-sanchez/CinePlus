@@ -4,14 +4,16 @@ using CinePlus.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CinePlus.Migrations
 {
     [DbContext(typeof(CinePlusDBContext))]
-    partial class CinePlusDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210602191757_Update3")]
+    partial class Update3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,9 +26,6 @@ namespace CinePlus.Migrations
                     b.Property<string>("ArmChairId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("No")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("StateArmChair")
                         .HasColumnType("int");
 
@@ -35,35 +34,12 @@ namespace CinePlus.Migrations
                     b.ToTable("ArmChair");
                 });
 
-            modelBuilder.Entity("CinePlus.Models.ArmChairByRoom", b =>
-                {
-                    b.Property<string>("ArmChairByRoomId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ArmChairId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RoomId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ArmChairByRoomId");
-
-                    b.HasIndex("ArmChairId");
-
-                    b.HasIndex("RoomId");
-
-                    b.ToTable("ArmChairByRoom");
-                });
-
             modelBuilder.Entity("CinePlus.Models.Cart", b =>
                 {
                     b.Property<string>("CartId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ArmChairId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ShowId")
+                    b.Property<string>("UserBoughtArmChairId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
@@ -71,9 +47,7 @@ namespace CinePlus.Migrations
 
                     b.HasKey("CartId");
 
-                    b.HasIndex("ArmChairId");
-
-                    b.HasIndex("ShowId");
+                    b.HasIndex("UserBoughtArmChairId");
 
                     b.HasIndex("UserId");
 
@@ -205,9 +179,6 @@ namespace CinePlus.Migrations
                     b.Property<string>("RoomId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("NoArmChairs")
                         .HasColumnType("int");
 
@@ -334,7 +305,10 @@ namespace CinePlus.Migrations
                     b.Property<string>("UserBoughtArmChairId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ArmChairByRoomId")
+                    b.Property<string>("ArmChairId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoomId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ShowId")
@@ -345,7 +319,9 @@ namespace CinePlus.Migrations
 
                     b.HasKey("UserBoughtArmChairId");
 
-                    b.HasIndex("ArmChairByRoomId");
+                    b.HasIndex("ArmChairId");
+
+                    b.HasIndex("RoomId");
 
                     b.HasIndex("ShowId");
 
@@ -489,26 +465,11 @@ namespace CinePlus.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("CinePlus.Models.ArmChairByRoom", b =>
-                {
-                    b.HasOne("CinePlus.Models.ArmChair", "ArmChair")
-                        .WithMany()
-                        .HasForeignKey("ArmChairId");
-
-                    b.HasOne("CinePlus.Models.Room", "Room")
-                        .WithMany()
-                        .HasForeignKey("RoomId");
-                });
-
             modelBuilder.Entity("CinePlus.Models.Cart", b =>
                 {
-                    b.HasOne("CinePlus.Models.ArmChair", "ArmChair")
+                    b.HasOne("CinePlus.Models.UserBoughtArmChair", "UserBoughtArmChair")
                         .WithMany()
-                        .HasForeignKey("ArmChairId");
-
-                    b.HasOne("CinePlus.Models.Show", "Show")
-                        .WithMany()
-                        .HasForeignKey("ShowId");
+                        .HasForeignKey("UserBoughtArmChairId");
 
                     b.HasOne("CinePlus.Models.User", "User")
                         .WithMany()
@@ -564,9 +525,13 @@ namespace CinePlus.Migrations
 
             modelBuilder.Entity("CinePlus.Models.UserBoughtArmChair", b =>
                 {
-                    b.HasOne("CinePlus.Models.ArmChairByRoom", "ArmChairByRoom")
+                    b.HasOne("CinePlus.Models.ArmChair", "ArmChair")
                         .WithMany()
-                        .HasForeignKey("ArmChairByRoomId");
+                        .HasForeignKey("ArmChairId");
+
+                    b.HasOne("CinePlus.Models.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId");
 
                     b.HasOne("CinePlus.Models.Show", "Show")
                         .WithMany()

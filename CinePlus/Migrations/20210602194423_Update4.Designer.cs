@@ -4,14 +4,16 @@ using CinePlus.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CinePlus.Migrations
 {
     [DbContext(typeof(CinePlusDBContext))]
-    partial class CinePlusDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210602194423_Update4")]
+    partial class Update4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,9 +25,6 @@ namespace CinePlus.Migrations
                 {
                     b.Property<string>("ArmChairId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("No")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StateArmChair")
                         .HasColumnType("int");
@@ -61,7 +60,7 @@ namespace CinePlus.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ArmChairId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShowId")
                         .HasColumnType("nvarchar(450)");
@@ -70,8 +69,6 @@ namespace CinePlus.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("CartId");
-
-                    b.HasIndex("ArmChairId");
 
                     b.HasIndex("ShowId");
 
@@ -204,9 +201,6 @@ namespace CinePlus.Migrations
                 {
                     b.Property<string>("RoomId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NoArmChairs")
                         .HasColumnType("int");
@@ -502,10 +496,6 @@ namespace CinePlus.Migrations
 
             modelBuilder.Entity("CinePlus.Models.Cart", b =>
                 {
-                    b.HasOne("CinePlus.Models.ArmChair", "ArmChair")
-                        .WithMany()
-                        .HasForeignKey("ArmChairId");
-
                     b.HasOne("CinePlus.Models.Show", "Show")
                         .WithMany()
                         .HasForeignKey("ShowId");

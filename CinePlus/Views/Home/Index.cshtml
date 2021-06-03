@@ -23,7 +23,10 @@
 						<p class="card-text">@Model[i].Movie.Description</p>
 					</div>
 					<div class="card-footer" style="text-align: center;">
-						<a asp-action="AddCart" asp-controller="Cart" class="btn btn-dark">Comprar un Boleto</a>
+						<form asp-controller="Bilboard" asp-action="SearchMovie">
+							<input name="search" value="@Model[i].Movie.Name" hidden/>
+							<button type="submit" class="btn btn-dark">Comprar un Boleto</button>
+						</form>
 						<a style="margin-top:2%" asp-action="Details" asp-route-id="@Model[i].MovieId" asp-controller="Bilboard" class="btn btn-dark">Detalles</a>
 					</div>
 				</div>

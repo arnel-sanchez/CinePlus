@@ -5,20 +5,20 @@ using System.Threading.Tasks;
 
 namespace CinePlus.Models
 {
-    public class UserBoughtArmChair
+    public class Cart
     {
-        public string UserBoughtArmChairId { get; set; }
-
-        public ArmChairByRoom ArmChairByRoom { get; set; }
-
-        public string ArmChairByRoomId { get; set; }
-
-        public User User { get; set; }
+        public string CartId { get; set; }
 
         public string UserId { get; set; }
+
+        public User User { get; set; }
 
         public Show Show { get; set; }
 
         public string ShowId { get; set; }
+
+        public string ArmChairId { get; set; }
+
+        public ArmChair ArmChair { get; set; }
     }
 }

@@ -16,10 +16,14 @@ namespace CinePlus.DataAccess
 
         public bool ExistMovieById(string id);
 
-        public List<DiscountsByShow> GetShowByDate(DateTime date);
+        public List<Show> GetShowByDate(DateTime date);
 
-        public List<DiscountsByShow> GetShowByMovieName(string name);
+        public List<Show> GetShowByMovieName(string name);
 
         public Movie GetMovieById(string id);
+
+        public List<DiscountsByShow> GetDiscounts(string name);
+
+        public List<DiscountsByShow> GetDiscounts(DateTime date);
     }
 }

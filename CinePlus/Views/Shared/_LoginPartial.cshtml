@@ -1,6 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using CinePlus.DataAccess
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
+@inject ICartRepository ICartRepository
 
 <ul class="navbar-nav">
 	@if (SignInManager.IsSignedIn(User))
@@ -14,6 +16,9 @@
 				<a class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">Salir</a>
 			</div>
 		</li>
+		<li class="nav-item">
+			<a class="icon-shopping-cart icon-2x nav-link" asp-controller="Cart" asp-action="Index"></a><span class="align-top badge badge-light">@ICartRepository.GetCartCout(UserManager.FindByNameAsync(User.Identity.Name).Result.Id)</span>
+		</li>
 	}
 	else
 	{
@@ -23,8 +28,8 @@
 		<li class="nav-item">
 			<a class="nav-link" asp-area="Identity" asp-page="/Account/Login"> Entrar</a>
 		</li>
+		<li class="nav-item">
+			<a class="icon-shopping-cart icon-2x nav-link" asp-controller="Cart" asp-action="Index"></a>
+		</li>
 	}
-	<li class="nav-item">
-		<a class="icon-shopping-cart icon-2x nav-link" asp-controller="Cart" asp-action="Index"></a><span class="align-top badge badge-light">9</span>
-	</li>
 </ul>

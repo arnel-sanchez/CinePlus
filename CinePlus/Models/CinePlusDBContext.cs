@@ -34,5 +34,9 @@ namespace CinePlus.Models
         public DbSet<Top10> Top10 { get; set; }
 
         public DbSet<UserBoughtArmChair> UserBoughtArmChair { get; set; }
+
+        public DbSet<Cart> Carts { get; set; }
+
+        public DbSet<ArmChairByRoom> ArmChairByRoom { get; set; }
     }
 }
