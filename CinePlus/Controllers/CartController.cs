@@ -1,12 +1,11 @@
 ﻿using CinePlus.DataAccess;
 using CinePlus.Models;
+using CinePlus.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CinePlus.Controllers
 {
@@ -26,9 +25,33 @@ namespace CinePlus.Controllers
         {
             var userId = UserManager.FindByNameAsync(User.Identity.Name).Result.Id;
             var res = CartRepository.GetCartByUserId(userId);
-            return View(res);
+            var list = new ListCartResult
+            {
+                Carts = res
+            };
+            if (User.IsInRole(Roles.Partner))
+            {
+                list.Points = CartRepository.GetPointsByUserId(userId);
+                double total = 0;
+                foreach (var item in res)
+                {
+                    if (item.DiscountsByShow.DiscountId != "ninguno")
+                    {
+                        var discount = CartRepository.GetDiscountById(item.DiscountsByShow.DiscountId);
+                        total += item.DiscountsByShow.Show.Price - (item.DiscountsByShow.Show.Price * discount.Percent / 100);
+                    }
+                    else
+                    {
+                        total += item.DiscountsByShow.Show.Price;
+                    }
+                }
+                list.PointsTotals = total;
+            }
+            var prueba = new Export();
+            return View(list);
         }
 
+        [Authorize]
         public IActionResult SelectArmChair(string id)
         {
             if (id == null || id == "")
@@ -36,12 +59,13 @@ namespace CinePlus.Controllers
             var res = new SelectArmChairResult
             {
                 Show = CartRepository.GetShowById(id),
-                ArmChairByRooms = CartRepository.GetUserBoughtArmChairsByRoomId(CartRepository.GetShowById(id).RoomId)
+                ArmChairByRooms = CartRepository.GetArmChairsByRoomById(CartRepository.GetShowById(id).RoomId)
             };
 
             return View(res);
         }
 
+        [Authorize]
         [Route("/Cart/AddArmChair",Name = "addCart")]
         public IActionResult AddArmChair(string armChairId, string showId)
         {
@@ -49,14 +73,14 @@ namespace CinePlus.Controllers
             {
                 return NotFound();
             }
-            var discounts = CartRepository.GetDiscountByShowId(showId);
-            return View("SelectDiscount", new Tuple<string, string, List<DiscountsByShow>>(armChairId, showId, discounts));
+            var discounts = CartRepository.GetDiscountsByShowId(showId);
+            return View("SelectDiscount", new Tuple<string, List<DiscountsByShow>>(armChairId, discounts));
         }
-
+        
         [Authorize]
-        public IActionResult SelectDiscount(string armChairId, string showId, string discountId)
+        public IActionResult SelectDiscount(string armChairId, string discountByShowId)
         {
-            if (armChairId == "" || armChairId == null || showId == "" || showId == null || discountId == "" || discountId == null)
+            if (armChairId == "" || armChairId == null || discountByShowId == "" || discountByShowId == null)
             {
                 return NotFound();
             }
@@ -64,12 +88,24 @@ namespace CinePlus.Controllers
             {
                 ArmChairId = armChairId,
                 CartId = Guid.NewGuid().ToString(),
-                ShowId = showId,
                 User = UserManager.FindByNameAsync(User.Identity.Name).Result,
-                DiscountId = discountId
+                DiscountsByShowId = discountByShowId
             };
+            var armChair = CartRepository.GetArmChairById(armChairId);
+            armChair.StateArmChair = StateArmChair.sold;
+            CartRepository.UpdateArmChair(armChair);
             CartRepository.AddCart(cart);
-            return RedirectToAction("SelectArmChair", new Dictionary<string, string> { { "id", showId } });
+            var discounstByShow = CartRepository.GetDiscountByShowById(discountByShowId);
+            var userBouthArmChair = new UserBoughtArmChair
+            {
+                ShowId = discounstByShow.ShowId,
+                Show = discounstByShow.Show,
+                UserBoughtArmChairId = Guid.NewGuid().ToString(),
+                UserId = UserManager.FindByNameAsync(User.Identity.Name).Result.Id,
+                ArmChairByRoomId = CartRepository.GetArmChairByRoomById(armChairId).ArmChairByRoomId
+            };
+            CartRepository.AddUserBoughtArmChair(userBouthArmChair);
+            return RedirectToAction("SelectArmChair", new Dictionary<string, string> { { "id", discounstByShow.ShowId } });
         }
 
         [Authorize]
@@ -79,14 +115,121 @@ namespace CinePlus.Controllers
             {
                 return NotFound();
             }
+            var cart = CartRepository.GetCartById(id);
+            var armChair = CartRepository.GetArmChairById(cart.ArmChairId);
             CartRepository.DeleteCartById(id);
+            armChair.StateArmChair = StateArmChair.ready;
+            CartRepository.UpdateArmChair(armChair);
             return RedirectToAction("Index");
         }
         
         [Authorize]
         [HttpPost]
-        public IActionResult PayTicket(PayTicketRequest request)
+        public IActionResult PayTicketWithMoney(PayTicketRequest request)
         {
+            if(ModelState.IsValid)
+            {
+                var user = UserManager.FindByNameAsync(User.Identity.Name).Result;
+                var res = CartRepository.GetCartByUserId(user.Id);
+                if (User.IsInRole(Roles.Partner))
+                {
+                    CartRepository.UdateAddPointsPartner(user.Id, res.Count * 5);
+                }
+                string hashValue = HasherCard.Hash(request.Card.ToString());
+
+                double payed = 0;
+                foreach (var item in res)
+                {
+                    if (item.DiscountsByShow.DiscountId != "ninguno")
+                    {
+                        var discount = CartRepository.GetDiscountById(item.DiscountsByShow.DiscountId);
+                        payed += item.DiscountsByShow.Show.Price - (item.DiscountsByShow.Show.Price * discount.Percent / 100);
+                    }
+                    else
+                    {
+                        payed += item.DiscountsByShow.Show.Price;
+                    }
+                }
+
+                var payCart = new PayCart
+                {
+                    DateTime = DateTime.Now,
+                    UserId = user.Id,
+                    CardHash = hashValue,
+                    User = user,
+                    PayCartId = Guid.NewGuid().ToString(),
+                    Payed = payed
+                };
+                CartRepository.AddPayCart(payCart);
+                foreach (var item in res)
+                {
+                    var armChairByRoom = CartRepository.GetArmChairByRoomById(item.ArmChairId);
+                    var userBoughtArmChair = CartRepository.GetUserBoughtArmChair(item.DiscountsByShow.ShowId, user.Id, armChairByRoom.ArmChairByRoomId);
+                    var pay = new Pay
+                    {
+                        PayId = Guid.NewGuid().ToString(),
+                        PayCart = payCart,
+                        PayCartId = payCart.PayCartId,
+                        DiscountById = item.DiscountsByShow.DiscountId,
+                        UserBoughtArmChair = userBoughtArmChair,
+                        UserBougthArmChairId = userBoughtArmChair.UserBoughtArmChairId
+                    };
+                    CartRepository.AddPay(pay);
+                    CartRepository.DeleteCartById(item.CartId);
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = Roles.Partner)]
+        [HttpPost]
+        public IActionResult PayTicketWithPoints()
+        {
+            var user = UserManager.FindByNameAsync(User.Identity.Name).Result;
+            var partner = CartRepository.GetPartnerCodeById(user.Id);
+            var res = CartRepository.GetCartByUserId(user.Id);
+            string hashValue = HasherCard.Hash(partner);
+
+            double payed = 0;
+            foreach (var item in res)
+            {
+                if (item.DiscountsByShow.DiscountId != "ninguno")
+                {
+                    var discount = CartRepository.GetDiscountById(item.DiscountsByShow.DiscountId);
+                    payed += item.DiscountsByShow.Show.PriceInPoints - (item.DiscountsByShow.Show.PriceInPoints * discount.Percent / 100);
+                }
+                else
+                {
+                    payed += item.DiscountsByShow.Show.PriceInPoints;
+                }
+            }
+            CartRepository.UdateRestPointsPartner(user.Id, payed);
+            var payCart = new PayCart
+            {
+                DateTime = DateTime.Now,
+                UserId = user.Id,
+                CardHash = hashValue,
+                User = user,
+                PayCartId = Guid.NewGuid().ToString(),
+                Payed = payed
+            };
+            CartRepository.AddPayCart(payCart);
+            foreach (var item in res)
+            {
+                var armChairByRoom = CartRepository.GetArmChairByRoomById(item.ArmChairId);
+                var userBoughtArmChair = CartRepository.GetUserBoughtArmChair(item.DiscountsByShow.ShowId, user.Id, armChairByRoom.ArmChairByRoomId);
+                var pay = new Pay
+                {
+                    PayId = Guid.NewGuid().ToString(),
+                    PayCart = payCart,
+                    PayCartId = payCart.PayCartId,
+                    DiscountById = item.DiscountsByShow.DiscountId,
+                    UserBoughtArmChair = userBoughtArmChair,
+                    UserBougthArmChairId = userBoughtArmChair.UserBoughtArmChairId
+                };
+                CartRepository.AddPay(pay);
+                CartRepository.DeleteCartById(item.CartId);
+            }
             return RedirectToAction("Index");
         }
     }

@@ -13,6 +13,8 @@ namespace CinePlus.Models
 
         public double Price { get; set; }
 
+        public double PriceInPoints { get; set; }
+
         public Movie Movie { get; set; }
 
         public string MovieId { get; set; }

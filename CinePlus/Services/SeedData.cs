@@ -73,9 +73,20 @@ namespace CinePlus.Services
                     Role = await roleManager.GetRoleNameAsync(rol),
                     EmailConfirmed = true
                 };
+                Random random = new Random();
+                Partner partner = new Partner
+                {
+                    UserId = user.Id,
+                    User = user,
+                    Id = Guid.NewGuid().ToString(),
+                    Points = 0,
+                    Code = random.Next(100000, 1000000).ToString()
+                };
                 IdentityResult result = await userManager.CreateAsync(user, password);
                 if (result.Succeeded)
                 {
+                    var context = serviceProvider.GetRequiredService<CinePlusDBContext>();
+                    context.Partner.Add(partner);
                     await userManager.AddToRoleAsync(user, role);
                 }
             }
@@ -353,11 +364,17 @@ namespace CinePlus.Services
                     context.ArmChairByRoom.Add(armChairByRoom);
                     context.SaveChanges();
                 }
-                var discount = new Discount
+                var discount1 = new Discount
                 {
                     DiscountId = Guid.NewGuid().ToString(),
                     Name = "Estudiantes de la FEU",
                     Percent = 50
+                };
+                var discount2 = new Discount
+                {
+                    DiscountId = "ninguno",
+                    Name = "Ninguno",
+                    Percent = 0
                 };
                 var show = new Show
                 {
@@ -365,22 +382,33 @@ namespace CinePlus.Services
                     RoomId = room.RoomId,
                     DateTime = DateTime.Now,
                     Price = 50,
+                    PriceInPoints = 20,
                     ShowId = Guid.NewGuid().ToString(),
                     Movie = context.Movie.Where(x => x.Name == "Rápido y Furioso I").FirstOrDefault(),
                     MovieId = context.Movie.Where(x => x.Name == "Rápido y Furioso I").FirstOrDefault().MovieId
                 };
-                var discountByShow = new DiscountsByShow
+                var discountByShow1 = new DiscountsByShow
                 {
-                    Discount = discount,
-                    DiscountId = discount.DiscountId,
+                    Discount = discount1,
+                    DiscountId = discount1.DiscountId,
                     DiscountsByShowId = Guid.NewGuid().ToString(),
                     Show = show,
                     ShowId = show.ShowId
                 };
-                
-                context.Discount.Add(discount);
+                var discountByShow2 = new DiscountsByShow
+                {
+                    Discount = discount2,
+                    DiscountId = discount2.DiscountId,
+                    DiscountsByShowId = Guid.NewGuid().ToString(),
+                    Show = show,
+                    ShowId = show.ShowId
+                };
+
+                context.Discount.Add(discount1);
+                context.Discount.Add(discount2);
                 context.Show.Add(show);
-                context.DiscountsByShow.Add(discountByShow);
+                context.DiscountsByShow.Add(discountByShow1);
+                context.DiscountsByShow.Add(discountByShow2);
                 context.SaveChanges();
 
                 show = new Show
@@ -389,21 +417,31 @@ namespace CinePlus.Services
                     RoomId = room.RoomId,
                     DateTime = DateTime.Now,
                     Price = 20,
+                    PriceInPoints = 20,
                     ShowId = Guid.NewGuid().ToString(),
                     Movie = context.Movie.Where(x => x.Name == "Titanic").FirstOrDefault(),
                     MovieId = context.Movie.Where(x => x.Name == "Titanic").FirstOrDefault().MovieId
                 };
-                discountByShow = new DiscountsByShow
+                discountByShow1 = new DiscountsByShow
                 {
-                    Discount = discount,
-                    DiscountId = discount.DiscountId,
+                    Discount = discount1,
+                    DiscountId = discount1.DiscountId,
+                    DiscountsByShowId = Guid.NewGuid().ToString(),
+                    Show = show,
+                    ShowId = show.ShowId
+                };
+                discountByShow2 = new DiscountsByShow
+                {
+                    Discount = discount2,
+                    DiscountId = discount2.DiscountId,
                     DiscountsByShowId = Guid.NewGuid().ToString(),
                     Show = show,
                     ShowId = show.ShowId
                 };
 
                 context.Show.Add(show);
-                context.DiscountsByShow.Add(discountByShow);
+                context.DiscountsByShow.Add(discountByShow1);
+                context.DiscountsByShow.Add(discountByShow2);
                 context.SaveChanges();
 
                 show = new Show
@@ -412,21 +450,31 @@ namespace CinePlus.Services
                     RoomId = room.RoomId,
                     DateTime = DateTime.Now,
                     Price = 20,
+                    PriceInPoints = 20,
                     ShowId = Guid.NewGuid().ToString(),
                     Movie = context.Movie.Where(x => x.Name == "The Curse of La Llorona").FirstOrDefault(),
                     MovieId = context.Movie.Where(x => x.Name == "The Curse of La Llorona").FirstOrDefault().MovieId
                 };
-                discountByShow = new DiscountsByShow
+                discountByShow1 = new DiscountsByShow
                 {
-                    Discount = discount,
-                    DiscountId = discount.DiscountId,
+                    Discount = discount1,
+                    DiscountId = discount1.DiscountId,
+                    DiscountsByShowId = Guid.NewGuid().ToString(),
+                    Show = show,
+                    ShowId = show.ShowId
+                };
+                discountByShow2 = new DiscountsByShow
+                {
+                    Discount = discount2,
+                    DiscountId = discount2.DiscountId,
                     DiscountsByShowId = Guid.NewGuid().ToString(),
                     Show = show,
                     ShowId = show.ShowId
                 };
 
                 context.Show.Add(show);
-                context.DiscountsByShow.Add(discountByShow);
+                context.DiscountsByShow.Add(discountByShow1);
+                context.DiscountsByShow.Add(discountByShow2);
                 context.SaveChanges();
 
                 show = new Show
@@ -435,21 +483,31 @@ namespace CinePlus.Services
                     RoomId = room.RoomId,
                     DateTime = DateTime.Now,
                     Price = 20,
+                    PriceInPoints = 20,
                     ShowId = Guid.NewGuid().ToString(),
                     Movie = context.Movie.Where(x => x.Name == "Ocho Apellidos Bascos").FirstOrDefault(),
                     MovieId = context.Movie.Where(x => x.Name == "Ocho Apellidos Bascos").FirstOrDefault().MovieId
                 };
-                discountByShow = new DiscountsByShow
+                discountByShow1 = new DiscountsByShow
                 {
-                    Discount = discount,
-                    DiscountId = discount.DiscountId,
+                    Discount = discount1,
+                    DiscountId = discount1.DiscountId,
+                    DiscountsByShowId = Guid.NewGuid().ToString(),
+                    Show = show,
+                    ShowId = show.ShowId
+                };
+                discountByShow2 = new DiscountsByShow
+                {
+                    Discount = discount2,
+                    DiscountId = discount2.DiscountId,
                     DiscountsByShowId = Guid.NewGuid().ToString(),
                     Show = show,
                     ShowId = show.ShowId
                 };
 
                 context.Show.Add(show);
-                context.DiscountsByShow.Add(discountByShow);
+                context.DiscountsByShow.Add(discountByShow1);
+                context.DiscountsByShow.Add(discountByShow2);
                 context.SaveChanges();
 
                 show = new Show
@@ -458,21 +516,31 @@ namespace CinePlus.Services
                     RoomId = room.RoomId,
                     DateTime = DateTime.Now,
                     Price = 20,
+                    PriceInPoints = 20,
                     ShowId = Guid.NewGuid().ToString(),
                     Movie = context.Movie.Where(x => x.Name == "Harry Potter I").FirstOrDefault(),
                     MovieId = context.Movie.Where(x => x.Name == "Harry Potter I").FirstOrDefault().MovieId
                 };
-                discountByShow = new DiscountsByShow
+                discountByShow1 = new DiscountsByShow
                 {
-                    Discount = discount,
-                    DiscountId = discount.DiscountId,
+                    Discount = discount1,
+                    DiscountId = discount1.DiscountId,
+                    DiscountsByShowId = Guid.NewGuid().ToString(),
+                    Show = show,
+                    ShowId = show.ShowId
+                };
+                discountByShow2 = new DiscountsByShow
+                {
+                    Discount = discount2,
+                    DiscountId = discount2.DiscountId,
                     DiscountsByShowId = Guid.NewGuid().ToString(),
                     Show = show,
                     ShowId = show.ShowId
                 };
 
                 context.Show.Add(show);
-                context.DiscountsByShow.Add(discountByShow);
+                context.DiscountsByShow.Add(discountByShow1);
+                context.DiscountsByShow.Add(discountByShow2);
                 context.SaveChanges();
             }
         }

@@ -4,14 +4,16 @@ using CinePlus.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CinePlus.Migrations
 {
     [DbContext(typeof(CinePlusDBContext))]
-    partial class CinePlusDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210604172648_Update12")]
+    partial class Update12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,7 +65,10 @@ namespace CinePlus.Migrations
                     b.Property<string>("ArmChairId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("DiscountsByShowId")
+                    b.Property<string>("DiscountId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShowId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
@@ -73,7 +78,7 @@ namespace CinePlus.Migrations
 
                     b.HasIndex("ArmChairId");
 
-                    b.HasIndex("DiscountsByShowId");
+                    b.HasIndex("ShowId");
 
                     b.HasIndex("UserId");
 
@@ -280,8 +285,8 @@ namespace CinePlus.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<double>("PriceInPoints")
-                        .HasColumnType("float");
+                    b.Property<long>("PriceInPoints")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("RoomId")
                         .HasColumnType("nvarchar(450)");
@@ -559,9 +564,9 @@ namespace CinePlus.Migrations
                         .WithMany()
                         .HasForeignKey("ArmChairId");
 
-                    b.HasOne("CinePlus.Models.DiscountsByShow", "DiscountsByShow")
+                    b.HasOne("CinePlus.Models.Show", "Show")
                         .WithMany()
-                        .HasForeignKey("DiscountsByShowId");
+                        .HasForeignKey("ShowId");
 
                     b.HasOne("CinePlus.Models.User", "User")
                         .WithMany()

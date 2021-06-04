@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -19,6 +19,7 @@
     <None Remove="Areas\Identity\Pages\Account\Register.cshtml~RF16023b57.TMP" />
     <None Remove="Areas\Identity\Pages\Account\ResetPassword.cshtml~RF1aaa23e1.TMP" />
     <None Remove="Controllers\BilboardController.cs~RF2eb27704.TMP" />
+    <None Remove="Controllers\CartController.cs~RF334fa632.TMP" />
     <None Remove="Services\EmailSender.cs~RF1a2270fd.TMP" />
     <None Remove="Views\Bilboard\Details.cshtml~RF20327b80.TMP" />
     <None Remove="Views\Bilboard\Details.cshtml~RF257c6493.TMP" />
@@ -29,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.15" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.15" />
@@ -39,6 +39,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
     <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
+    <PackageReference Include="PdfSharpCore" Version="1.2.16" />
   </ItemGroup>
 
   <ItemGroup>

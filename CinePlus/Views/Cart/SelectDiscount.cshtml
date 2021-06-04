@@ -1,4 +1,4 @@
-﻿@model Tuple<string, string, List<DiscountsByShow>>
+﻿@model Tuple<string, List<DiscountsByShow>>
 @{
 	ViewData["Title"] = "Selecciona el Descuento a Aplicar";
 }
@@ -7,12 +7,17 @@
 	<h1 style="padding: 3%;">Asignar Descuento</h1>
 	<form asp-action="SelectDiscount" asp-controller="Cart" method="post">
 		<input name="armChairId" value="@Model.Item1" hidden />
-		<input name="showId" value="@Model.Item2" hidden />
-		<select name="discountId" class="custom-select form-control">
-			<option value="ninguno">Ninguno</option>
-			@foreach (var item in Model.Item3)
+		<select name="discountByShowId" class="custom-select form-control">
+			@foreach (var item in Model.Item2)
 			{
-				<option value="@item.DiscountId">@item.Discount.Name</option>
+				if (item.Discount.Name == "Ninguno")
+				{
+					<option selected value="@item.DiscountsByShowId">@item.Discount.Name</option>
+				}
+				else
+				{
+					<option value="@item.DiscountsByShowId">@item.Discount.Name</option>
+				}
 			}
 		</select>
 		<button style="margin-top:2%" class="btn btn-dark">Seleccionar</button>

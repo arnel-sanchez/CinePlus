@@ -9,16 +9,14 @@ namespace CinePlus.Models
     {
         public string PayId { get; set; }
 
-        public User User { get; set; }
+        public PayCart PayCart { get; set; }
 
-        public string CardHash { get; set; }
+        public string PayCartId { get; set; }
 
         public UserBoughtArmChair UserBoughtArmChair { get; set; }
 
         public string UserBougthArmChairId { get; set; }
 
         public string DiscountById { get; set; }
-
-        public string IdentifierDay { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model List<Cart>
+﻿@model ListCartResult
 @{
 	ViewData["Title"] = "Carrito de Compras";
 }
@@ -10,17 +10,18 @@
 		<button style="margin:1%; margin-left: 80%" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal">Efectuar Compra</button>
 	</div>
 	<div class="card-deck content" style="text-align: center; height:320px; overflow-y: scroll;">
-		@foreach (var item in Model)
+		@foreach (var item in Model.Carts)
 		{
 			<div class="col-sm-3">
 				<div class="card">
-					<img class="card-img-top" src=@item.Show.Movie.URL alt="Card image cap">
+					<img class="card-img-top" src=@item.DiscountsByShow.Show.Movie.URL alt="Card image cap">
 					<div class="card-body">
-						<h5 class="card-title">@item.Show.Movie.Name</h5>
-						<p class="card-text">@item.Show.Movie.Description</p>
-						<p class="card-subtitle">Sala: @item.Show.Room.Name </p>
-						<p class="card-subtitle">Fecha y Hora: @item.Show.DateTime</p>
-						<p class="card-subtitle">Precio: $@item.Show.Price</p>
+						<h5 class="card-title">@item.DiscountsByShow.Show.Movie.Name</h5>
+						<p class="card-text">@item.DiscountsByShow.Show.Movie.Description</p>
+						<p class="card-subtitle">Sala: @item.DiscountsByShow.Show.Room.Name </p>
+						<p class="card-subtitle">Fecha y Hora: @item.DiscountsByShow.Show.DateTime</p>
+						@{ var price = item.DiscountsByShow.Show.Price - (item.DiscountsByShow.Show.Price * item.DiscountsByShow.Discount.Percent / 100);}
+						<p class="card-subtitle">Precio: $@price</p>
 						<p class="card-subtitle">No. Asiento: @item.ArmChair.No</p>
 					</div>
 					<div class="card-footer" style="text-align: center;">
@@ -31,7 +32,7 @@
 		}
 	</div>
 </section>
-@if (User.IsInRole(Roles.Partner))
+@if (User.IsInRole(Roles.Partner) && Model.Points >= Model.PointsTotals)
 {
 	<div class="modal fade" id="exampleModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
 		<div class="modal-dialog modal-dialog-centered">
@@ -46,7 +47,7 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
 					<button class="btn btn-dark" data-target="#exampleModalToggle2" data-toggle="modal" data-dismiss="modal">Pagar con Dinero</button>
-					<a asp-action="" asp-controller="" asp-route-id="" class="btn btn-dark">Pagar con Puntos de Socio</a>
+					<a asp-action="PayTicketWithPoints" asp-controller="Cart" class="btn btn-dark">Pagar con Puntos de Socio</a>
 				</div>
 			</div>
 		</div>
@@ -58,12 +59,12 @@
 					<h5 class="modal-title" id="exampleModalLabel">Pago</h5>
 					<button type="button" class="btn icon-remove-circle icon-2x" data-dismiss="modal" aria-label="Close"></button>
 				</div>
-				<form asp-action="PayTicket" asp-controller="Cart">
+				<form asp-action="PayTicketWithMoney" asp-controller="Cart">
 					<div class="modal-body">
 
 						<div class="mb-3">
 							<label class="col-form-label">Inserte la Tarjeta</label>
-							<input type="number" class="form-control" name="Card1" />
+							<input type="number" class="form-control" name="Card" />
 						</div>
 						<div class="mb-3">
 							<label class="col-form-label">Nombre y Apellidos</label>
@@ -75,7 +76,7 @@
 						</div>
 						<div class="mb-3">
 							<label class="col-form-label">Fecha de Expiración</label>
-							<input type="date" class="form-control" name="Date">
+							<input type="month" class="form-control" name="Date">
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -97,12 +98,12 @@ else
 					<h5 class="modal-title" id="exampleModalLabel">Pago</h5>
 					<button type="button" class="btn icon-remove-circle icon-2x" data-dismiss="modal" aria-label="Close"></button>
 				</div>
-				<form asp-action="PayTicket" asp-controller="Cart">
+				<form asp-action="PayTicketWithMoney" asp-controller="Cart">
 					<div class="modal-body">
 
 						<div class="mb-3">
 							<label class="col-form-label">Inserte la Tarjeta</label>
-							<input type="number" class="form-control" name="Card1" />
+							<input type="number" class="form-control" name="Card" />
 						</div>
 						<div class="mb-3">
 							<label class="col-form-label">Nombre y Apellidos</label>
@@ -114,7 +115,7 @@ else
 						</div>
 						<div class="mb-3">
 							<label class="col-form-label">Fecha de Expiración</label>
-							<input type="date" class="form-control" name="Date">
+							<input type="month" class="form-control" name="Date">
 						</div>
 					</div>
 					<div class="modal-footer">

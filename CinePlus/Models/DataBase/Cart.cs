@@ -13,14 +13,12 @@ namespace CinePlus.Models
 
         public User User { get; set; }
 
-        public Show Show { get; set; }
-
-        public string ShowId { get; set; }
-
         public string ArmChairId { get; set; }
 
         public ArmChair ArmChair { get; set; }
 
-        public string DiscountId { get; set; }
+        public DiscountsByShow DiscountsByShow { get; set; }
+
+        public string DiscountsByShowId { get; set; }
     }
 }

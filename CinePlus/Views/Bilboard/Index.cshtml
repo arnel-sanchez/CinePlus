@@ -32,7 +32,7 @@
 					<p class="card-subtitle">Fecha y Hora de Emisión: @Model.Shows[i].DateTime</p>
 					@foreach (var item in Model.DiscountsByShows)
 					{
-						if (item.ShowId == Model.Shows[i].ShowId)
+						if (item.ShowId == Model.Shows[i].ShowId && item.Discount.DiscountId != "ninguno")
 						{
 							<p class="card-subtitle alert-success" style="margin:2%;"> Descuento @item.Discount.Name del @item.Discount.Percent% </p>
 						}

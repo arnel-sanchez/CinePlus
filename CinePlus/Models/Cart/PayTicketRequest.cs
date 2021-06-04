@@ -10,5 +10,9 @@ namespace CinePlus.Models
         public long Card { get; set; }
 
         public int Code { get; set; }
+
+        public string Name { get; set; }
+
+        public DateTime DateTime { get; set; }
     }
 }

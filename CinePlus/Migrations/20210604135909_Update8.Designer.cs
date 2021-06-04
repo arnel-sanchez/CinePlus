@@ -4,14 +4,16 @@ using CinePlus.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CinePlus.Migrations
 {
     [DbContext(typeof(CinePlusDBContext))]
-    partial class CinePlusDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210604135909_Update8")]
+    partial class Update8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,7 +65,10 @@ namespace CinePlus.Migrations
                     b.Property<string>("ArmChairId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("DiscountsByShowId")
+                    b.Property<string>("DiscountId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShowId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
@@ -73,7 +78,7 @@ namespace CinePlus.Migrations
 
                     b.HasIndex("ArmChairId");
 
-                    b.HasIndex("DiscountsByShowId");
+                    b.HasIndex("ShowId");
 
                     b.HasIndex("UserId");
 
@@ -187,8 +192,8 @@ namespace CinePlus.Migrations
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Points")
-                        .HasColumnType("float");
+                    b.Property<long>("Points")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -205,11 +210,14 @@ namespace CinePlus.Migrations
                     b.Property<string>("PayId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("CardHash")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DiscountById")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PayCartId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("IdentifierDay")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserBoughtArmChairId")
                         .HasColumnType("nvarchar(450)");
@@ -217,37 +225,16 @@ namespace CinePlus.Migrations
                     b.Property<string>("UserBougthArmChairId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("PayId");
-
-                    b.HasIndex("PayCartId");
-
-                    b.HasIndex("UserBoughtArmChairId");
-
-                    b.ToTable("Pay");
-                });
-
-            modelBuilder.Entity("CinePlus.Models.PayCart", b =>
-                {
-                    b.Property<string>("PayCartId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CardHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Payed")
-                        .HasColumnType("float");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("PayCartId");
+                    b.HasKey("PayId");
+
+                    b.HasIndex("UserBoughtArmChairId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PayCart");
+                    b.ToTable("Pay");
                 });
 
             modelBuilder.Entity("CinePlus.Models.Room", b =>
@@ -280,8 +267,8 @@ namespace CinePlus.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<double>("PriceInPoints")
-                        .HasColumnType("float");
+                    b.Property<long>("PriceInPoints")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("RoomId")
                         .HasColumnType("nvarchar(450)");
@@ -559,9 +546,9 @@ namespace CinePlus.Migrations
                         .WithMany()
                         .HasForeignKey("ArmChairId");
 
-                    b.HasOne("CinePlus.Models.DiscountsByShow", "DiscountsByShow")
+                    b.HasOne("CinePlus.Models.Show", "Show")
                         .WithMany()
-                        .HasForeignKey("DiscountsByShowId");
+                        .HasForeignKey("ShowId");
 
                     b.HasOne("CinePlus.Models.User", "User")
                         .WithMany()
@@ -606,17 +593,10 @@ namespace CinePlus.Migrations
 
             modelBuilder.Entity("CinePlus.Models.Pay", b =>
                 {
-                    b.HasOne("CinePlus.Models.PayCart", "PayCart")
-                        .WithMany()
-                        .HasForeignKey("PayCartId");
-
                     b.HasOne("CinePlus.Models.UserBoughtArmChair", "UserBoughtArmChair")
                         .WithMany()
                         .HasForeignKey("UserBoughtArmChairId");
-                });
 
-            modelBuilder.Entity("CinePlus.Models.PayCart", b =>
-                {
                     b.HasOne("CinePlus.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
