@@ -20,5 +20,7 @@ namespace CinePlus.Models
         public DiscountsByShow DiscountsByShow { get; set; }
 
         public string DiscountsByShowId { get; set; }
+
+        public DateTime DateTime { get; set; }
     }
 }

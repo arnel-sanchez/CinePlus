@@ -4,6 +4,7 @@ using CinePlus.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 
@@ -13,11 +14,13 @@ namespace CinePlus.Controllers
     {
         private readonly ICartRepository CartRepository;
         private readonly UserManager<User> UserManager;
+        private readonly ILogger<CartController> Logger;
 
-        public CartController(ICartRepository cartRepository, UserManager<User> userManager)
+        public CartController(ILogger<CartController> logger, ICartRepository cartRepository, UserManager<User> userManager)
         {
             CartRepository = cartRepository;
             UserManager = userManager;
+            Logger = logger;
         }
 
         [Authorize]
@@ -109,7 +112,8 @@ namespace CinePlus.Controllers
                 ArmChairId = armChairId,
                 CartId = Guid.NewGuid().ToString(),
                 User = UserManager.FindByNameAsync(User.Identity.Name).Result,
-                DiscountsByShowId = discountByShowId
+                DiscountsByShowId = discountByShowId,
+                DateTime = DateTime.Now
             };
             var armChair = CartRepository.GetArmChairById(armChairId);
             armChair.StateArmChair = StateArmChair.sold;
@@ -137,9 +141,10 @@ namespace CinePlus.Controllers
             }
             var cart = CartRepository.GetCartById(id);
             var armChair = CartRepository.GetArmChairById(cart.ArmChairId);
-            CartRepository.DeleteCartById(id);
             armChair.StateArmChair = StateArmChair.ready;
             CartRepository.UpdateArmChair(armChair);
+            CartRepository.DeleteUserBoughtArmChairByShowIdAndUserIdAndArmChairId(cart.DiscountsByShow.ShowId, cart.UserId, cart.ArmChairId);
+            CartRepository.DeleteCartById(id);
             return RedirectToAction("Index");
         }
         

@@ -144,7 +144,11 @@ namespace CinePlus.DataAccess
 
         public Cart GetCartById(string id)
         {
-            return _context.Carts.Where(x => x.CartId == id).FirstOrDefault();
+            return _context.Carts.Where(x => x.CartId == id)
+                .Include(x=>x.DiscountsByShow)
+                .Include(x=>x.ArmChair)
+                .Include(x=>x.User)
+                .FirstOrDefault();
         }
 
         public Discount GetDiscountById(string id)
@@ -195,6 +199,23 @@ namespace CinePlus.DataAccess
         public PayCart GetPayCartById(string id)
         {
             throw new NotImplementedException();
+        }
+
+        public List<Cart> GetCartsByDate(DateTime date)
+        {
+            return _context.Carts
+                .Include(x=>x.ArmChair)
+                .Include(x=>x.User)
+                .Include(x=>x.DiscountsByShow)
+                .Where(x=>x.DateTime.AddMinutes(10).Year==date.Year && x.DateTime.AddMinutes(10).Month == date.Month && x.DateTime.AddMinutes(10).Day == date.Day && x.DateTime.AddMinutes(10).Hour == date.Hour && x.DateTime.AddMinutes(10).Minute == date.Minute)
+                .ToList();
+        }
+
+        public void DeleteUserBoughtArmChairByShowIdAndUserIdAndArmChairId(string showId, string userId, string armChairId)
+        {
+            var userBoughtArmChair = _context.UserBoughtArmChair.Where(x => x.UserId == userId && x.ShowId == showId && x.ArmChairByRoom.ArmChairId == armChairId).FirstOrDefault();
+            _context.UserBoughtArmChair.Remove(userBoughtArmChair);
+            _context.SaveChanges();
         }
     }
 }

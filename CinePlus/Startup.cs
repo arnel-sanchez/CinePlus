@@ -11,6 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,6 +65,25 @@ namespace CinePlus
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IBilboardRepository,BilboardDataAccess>();
             services.AddScoped<ICartRepository, CartDataAccess>();
+            services.AddQuartz(q =>
+            {
+                q.UseMicrosoftDependencyInjectionScopedJobFactory();
+
+                // Create a "key" for the job
+                var jobKey = new JobKey("HelloWorldJob");
+
+                // Register the job with the DI container
+                q.AddJob<ClearCarts>(opts => opts.WithIdentity(jobKey));
+
+                // Create a trigger for the job
+                q.AddTrigger(opts => opts
+                    .ForJob(jobKey) // link to the HelloWorldJob
+                    .WithIdentity("HelloWorldJob-trigger") // give the trigger a unique name
+                    .WithCronSchedule("1/0 * * * * ?")); // run every 5 seconds
+
+            });
+            services.AddQuartzHostedService(
+                    q => q.WaitForJobsToComplete = true);
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
