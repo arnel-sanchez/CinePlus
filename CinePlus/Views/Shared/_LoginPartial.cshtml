@@ -13,6 +13,7 @@
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 				<a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Cuenta</a>
+				<a class="dropdown-item" asp-action="GetPayCarts" asp-controller="Cart">Compras Realizadas</a>
 				<a class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">Salir</a>
 			</div>
 		</li>

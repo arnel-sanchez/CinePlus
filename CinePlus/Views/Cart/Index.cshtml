@@ -5,11 +5,20 @@
 <section>
 	<div style="text-align:center; padding:3%;">
 		<h1>Carrito de Compras</h1>
+		@if (User.IsInRole(Roles.Partner))
+		{
+			<h3>Pago Total de la Orden en Dinero: $@Model.CostMoney .</h3>
+			<h3>Pago Total de la Orden en Puntos: @Model.PointsTotals puntos.</h3>
+		}
+		else
+		{
+			<h3>Pago Total de la Orden: $@Model.CostMoney</h3>
+		}
 	</div>
 	<div>
 		<button style="margin:1%; margin-left: 80%" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal">Efectuar Compra</button>
 	</div>
-	<div class="card-deck content" style="text-align: center; height:320px; overflow-y: scroll;">
+	<div class="card-deck content" style="text-align: center; height:230px; overflow-y: scroll;">
 		@foreach (var item in Model.Carts)
 		{
 			<div class="col-sm-3">
@@ -22,6 +31,11 @@
 						<p class="card-subtitle">Fecha y Hora: @item.DiscountsByShow.Show.DateTime</p>
 						@{ var price = item.DiscountsByShow.Show.Price - (item.DiscountsByShow.Show.Price * item.DiscountsByShow.Discount.Percent / 100);}
 						<p class="card-subtitle">Precio: $@price</p>
+						@if(User.IsInRole(Roles.Partner))
+						{
+							var points = item.DiscountsByShow.Show.PriceInPoints - (item.DiscountsByShow.Show.PriceInPoints * item.DiscountsByShow.Discount.Percent / 100);
+							<p class="card-subtitle">Precio en Puntos: @points puntos.</p>
+						}
 						<p class="card-subtitle">No. Asiento: @item.ArmChair.No</p>
 					</div>
 					<div class="card-footer" style="text-align: center;">

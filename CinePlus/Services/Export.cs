@@ -13,15 +13,18 @@ namespace CinePlus.Services
 {
     public class Export : ControllerBase
     {
-        public IActionResult ExportToPDF(List<Cart> content)
+        public IActionResult ExportToPDF(List<Pay> content)
         {
             var document = new PdfDocument();
             foreach (var item in content)
             {
                 var index = 0;
                 var page = new PdfPage(document);
-                
-                var image = XImage.FromFile(item.DiscountsByShow.Show.Movie.URL);
+
+                var i = item.UserBoughtArmChair.Show.Movie.URL.IndexOf("/img/");
+                var url = item.UserBoughtArmChair.Show.Movie.URL.Substring(i);
+                url = "wwwroot" + url;
+                var image = XImage.FromFile(url);
                 var gfx = XGraphics.FromPdfPage(page);
 
                 gfx.DrawImage(image, (page.Width-300)/2, 50, 300, 300);
@@ -29,17 +32,49 @@ namespace CinePlus.Services
                 var font = new XFont("OpenSans", 20, XFontStyle.Bold);
 
                 var font2 = new XFont("OpenSans", 10, XFontStyle.Underline);
-
-                gfx.DrawString(item.DiscountsByShow.Show.Movie.Name, font, XBrushes.Black, new XRect(0, 0, page.Width, page.Height), XStringFormats.Center);
-                gfx.DrawString("Precio: $" + item.DiscountsByShow.Show.Price, font, XBrushes.Black, new XRect(20, 40, page.Width, page.Height), XStringFormats.CenterLeft);
-                gfx.DrawString("Sala: " + item.DiscountsByShow.Show.Room.Name, font, XBrushes.Black, new XRect(20, 65, page.Width, page.Height), XStringFormats.CenterLeft);
-                gfx.DrawString("Asiento: " + item.ArmChair.No, font, XBrushes.Black, new XRect(20, 95, page.Width, page.Height), XStringFormats.CenterLeft);
-                gfx.DrawString("Descuento: " + item.DiscountsByShow.Discount.Name + " del "+ item.DiscountsByShow.Discount.Percent + "%", font, XBrushes.Black, new XRect(20, 115, page.Width, page.Height), XStringFormats.CenterLeft);
-                gfx.DrawString("Comprado por: " + item.User.Name + " " + item.User.Name, font, XBrushes.Black, new XRect(20, 140, page.Width, page.Height), XStringFormats.CenterLeft);
-                gfx.DrawString("Fecha y Hora de la Función: " + item.DiscountsByShow.Show.DateTime, font, XBrushes.Black, new XRect(20, 165, page.Width, page.Height), XStringFormats.CenterLeft);
-                gfx.DrawString("CinePlus", font, XBrushes.Black, new XRect(0, 350, page.Width, page.Height), XStringFormats.Center);
-                gfx.DrawString("Sólo puede cancelar su entrada 2h antes del inicio de la función, pasado ese momento no se le devolverá su dinero.", font2, XBrushes.Black, new XRect(0, 370, page.Width, page.Height), XStringFormats.Center);
-                gfx.DrawString("Debe verificar su entrada en taquilla 30 minutos antes del inicio de la función, pasado ese momento se venderá su asiento.", font2, XBrushes.Black, new XRect(0, 390, page.Width, page.Height), XStringFormats.Center);
+                var len = 0;
+                gfx.DrawString(item.UserBoughtArmChair.Show.Movie.Name, font, XBrushes.Black, new XRect(0, len, page.Width, page.Height), XStringFormats.Center);
+                len += 40;
+                if(item.PayCart.PayedPoints==0)
+                {
+                    gfx.DrawString("Precio: $" + item.UserBoughtArmChair.Show.Price, font, XBrushes.Black, new XRect(20, len, page.Width, page.Height), XStringFormats.CenterLeft);
+                    len += 25;
+                    if (item.DiscountId != "ninguno")
+                    {
+                        gfx.DrawString("Descuento: " + item.Discount.Name + " del " + item.Discount.Percent + "%", font, XBrushes.Black, new XRect(20, len, page.Width, page.Height), XStringFormats.CenterLeft);
+                        len += 25;
+                        gfx.DrawString("Pagado: $" + (item.UserBoughtArmChair.Show.Price - (item.UserBoughtArmChair.Show.Price) * item.Discount.Percent / 100), font, XBrushes.Black, new XRect(20, len, page.Width, page.Height), XStringFormats.CenterLeft);
+                        len += 25;
+                    }
+                }
+                else
+                {
+                    gfx.DrawString("Precio: " + item.UserBoughtArmChair.Show.PriceInPoints + " puntos.", font, XBrushes.Black, new XRect(20, len, page.Width, page.Height), XStringFormats.CenterLeft);
+                    len += 25;
+                    if (item.DiscountId != "ninguno")
+                    {
+                        gfx.DrawString("Descuento: " + item.Discount.Name + " del " + item.Discount.Percent + "%", font, XBrushes.Black, new XRect(20, len, page.Width, page.Height), XStringFormats.CenterLeft);
+                        len += 25;
+                        gfx.DrawString("Pagado: " + (item.UserBoughtArmChair.Show.PriceInPoints - (item.UserBoughtArmChair.Show.PriceInPoints) * item.Discount.Percent / 100) + " puntos.", font, XBrushes.Black, new XRect(20, len, page.Width, page.Height), XStringFormats.CenterLeft);
+                        len += 25;
+                    }
+                }
+                gfx.DrawString("Sala: " + item.UserBoughtArmChair.Show.Room.Name, font, XBrushes.Black, new XRect(20, len, page.Width, page.Height), XStringFormats.CenterLeft);
+                len += 25;
+                gfx.DrawString("Asiento: " + item.UserBoughtArmChair.ArmChairByRoom.ArmChair.No, font, XBrushes.Black, new XRect(20, len, page.Width, page.Height), XStringFormats.CenterLeft);
+                len += 25;
+                gfx.DrawString("Comprado por: " + item.UserBoughtArmChair.User.Name + " " + item.UserBoughtArmChair.User.Name, font, XBrushes.Black, new XRect(20, len, page.Width, page.Height), XStringFormats.CenterLeft);
+                len += 25;
+                gfx.DrawString("Fecha y Hora de la Función: " + item.UserBoughtArmChair.Show.DateTime, font, XBrushes.Black, new XRect(20, len, page.Width, page.Height), XStringFormats.CenterLeft);
+                if (item.DiscountId != "ninguno")
+                    len += 155;
+                else
+                    len += 205;
+                gfx.DrawString("CinePlus", font, XBrushes.Black, new XRect(0, len, page.Width, page.Height), XStringFormats.Center);
+                len += 20;
+                gfx.DrawString("Sólo puede cancelar su entrada 2h antes del inicio de la función, pasado ese momento no se le devolverá su dinero.", font2, XBrushes.Black, new XRect(0, len, page.Width, page.Height), XStringFormats.Center);
+                len += 20;
+                gfx.DrawString("Debe verificar su entrada en taquilla 30 minutos antes del inicio de la función, pasado ese momento se venderá su asiento.", font2, XBrushes.Black, new XRect(0, len, page.Width, page.Height), XStringFormats.Center);
                 document.InsertPage(index, page);
                 index += 1;
             }

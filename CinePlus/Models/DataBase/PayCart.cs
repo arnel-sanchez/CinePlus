@@ -11,7 +11,9 @@ namespace CinePlus.Models
 
         public DateTime DateTime { get; set; }
 
-        public double Payed { get; set; }
+        public double PayedMoney { get; set; }
+
+        public double PayedPoints { get; set; }
 
         public User User { get; set; }
 

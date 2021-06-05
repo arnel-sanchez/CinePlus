@@ -170,5 +170,31 @@ namespace CinePlus.DataAccess
         {
             return _context.DiscountsByShow.Where(x => x.DiscountsByShowId == id).FirstOrDefault();
         }
+
+        public List<Pay> GetPayByUserIdAndPayCartId(string userId, string payCartId)
+        {
+            return _context.Pay
+                .Include(x => x.UserBoughtArmChair)
+                .Include(x => x.UserBoughtArmChair.ArmChairByRoom)
+                .Include(x => x.UserBoughtArmChair.ArmChairByRoom.ArmChair)
+                .Include(x => x.UserBoughtArmChair.ArmChairByRoom.Room)
+                .Include(x => x.UserBoughtArmChair.Show)
+                .Include(x => x.UserBoughtArmChair.Show.Movie)
+                .Include(x => x.Discount)
+                .Include(x => x.PayCart)
+                .Where(x => x.PayCartId == payCartId)
+                .Where(x => x.UserBoughtArmChair.UserId == userId)
+                .ToList();
+        }
+
+        public List<PayCart> GetPayCartByUserId(string id)
+        {
+            return _context.PayCart.Where(x => x.UserId == id).ToList();
+        }
+
+        public PayCart GetPayCartById(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

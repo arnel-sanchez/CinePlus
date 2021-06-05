@@ -33,6 +33,27 @@ namespace CinePlus.Controllers
             {
                 list.Points = CartRepository.GetPointsByUserId(userId);
                 double total = 0;
+                double points = 0;
+                foreach (var item in res)
+                {
+                    if (item.DiscountsByShow.DiscountId != "ninguno")
+                    {
+                        var discount = CartRepository.GetDiscountById(item.DiscountsByShow.DiscountId);
+                        total += item.DiscountsByShow.Show.Price - (item.DiscountsByShow.Show.Price * discount.Percent / 100);
+                        points += item.DiscountsByShow.Show.PriceInPoints - (item.DiscountsByShow.Show.PriceInPoints * discount.Percent / 100);
+                    }
+                    else
+                    {
+                        total += item.DiscountsByShow.Show.Price;
+                        points += item.DiscountsByShow.Show.PriceInPoints;
+                    }
+                }
+                list.PointsTotals = points;
+                list.CostMoney = total;
+            }
+            else
+            {
+                double total = 0;
                 foreach (var item in res)
                 {
                     if (item.DiscountsByShow.DiscountId != "ninguno")
@@ -45,9 +66,8 @@ namespace CinePlus.Controllers
                         total += item.DiscountsByShow.Show.Price;
                     }
                 }
-                list.PointsTotals = total;
+                list.CostMoney = total;
             }
-            var prueba = new Export();
             return View(list);
         }
 
@@ -158,7 +178,8 @@ namespace CinePlus.Controllers
                     CardHash = hashValue,
                     User = user,
                     PayCartId = Guid.NewGuid().ToString(),
-                    Payed = payed
+                    PayedMoney = payed,
+                    PayedPoints = 0
                 };
                 CartRepository.AddPayCart(payCart);
                 foreach (var item in res)
@@ -170,7 +191,7 @@ namespace CinePlus.Controllers
                         PayId = Guid.NewGuid().ToString(),
                         PayCart = payCart,
                         PayCartId = payCart.PayCartId,
-                        DiscountById = item.DiscountsByShow.DiscountId,
+                        DiscountId = item.DiscountsByShow.DiscountId,
                         UserBoughtArmChair = userBoughtArmChair,
                         UserBougthArmChairId = userBoughtArmChair.UserBoughtArmChairId
                     };
@@ -211,7 +232,8 @@ namespace CinePlus.Controllers
                 CardHash = hashValue,
                 User = user,
                 PayCartId = Guid.NewGuid().ToString(),
-                Payed = payed
+                PayedPoints = payed,
+                PayedMoney = 0
             };
             CartRepository.AddPayCart(payCart);
             foreach (var item in res)
@@ -223,7 +245,7 @@ namespace CinePlus.Controllers
                     PayId = Guid.NewGuid().ToString(),
                     PayCart = payCart,
                     PayCartId = payCart.PayCartId,
-                    DiscountById = item.DiscountsByShow.DiscountId,
+                    DiscountId = item.DiscountsByShow.DiscountId,
                     UserBoughtArmChair = userBoughtArmChair,
                     UserBougthArmChairId = userBoughtArmChair.UserBoughtArmChairId
                 };
@@ -231,6 +253,43 @@ namespace CinePlus.Controllers
                 CartRepository.DeleteCartById(item.CartId);
             }
             return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        public IActionResult GetPayCarts()
+        {
+            var user = UserManager.FindByNameAsync(User.Identity.Name).Result;
+            var payCarts = CartRepository.GetPayCartByUserId(user.Id);
+            var list = new List<ListPayCart> { };
+            foreach (var item in payCarts)
+            {
+                var temp = new ListPayCart { PayCart = item, Pays = CartRepository.GetPayByUserIdAndPayCartId(user.Id, item.PayCartId) };
+                list.Add(temp);
+            }
+            return View(list);
+        }
+
+        [Authorize]
+        public IActionResult Print(string id)
+        {
+            if(id == null || id == "")
+            {
+                return NotFound();
+            }
+            var user = UserManager.FindByNameAsync(User.Identity.Name).Result;
+            var list = CartRepository.GetPayByUserIdAndPayCartId(user.Id, id);
+            var export = new Export();
+            return export.ExportToPDF(list);
+        }
+
+        [Authorize]
+        public IActionResult CancelPay(string id)
+        {
+            if (id == null || id == "")
+            {
+                return NotFound();
+            }
+            return Ok();
         }
     }
 }

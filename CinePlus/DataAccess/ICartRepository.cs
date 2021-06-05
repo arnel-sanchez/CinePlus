@@ -51,5 +51,11 @@ namespace CinePlus.DataAccess
         public void AddPayCart(PayCart pay);
 
         public DiscountsByShow GetDiscountByShowById(string id);
+
+        public List<Pay> GetPayByUserIdAndPayCartId(string userId, string payCartId);
+
+        public List<PayCart> GetPayCartByUserId(string id);
+
+        public PayCart GetPayCartById(string id);
     }
 }

@@ -1,0 +1,51 @@
+﻿@model List<ListPayCart>
+@{
+	ViewData["Title"] = "Órdenes de Compra";
+}
+
+<section>
+	<div style="text-align:center; padding:3%;">
+		<h1>Órdenes de Compra</h1>
+	</div>
+	<div class="card-deck content" style="text-align: center; height:390px; overflow-y: scroll;">
+		@foreach (var item in Model)
+		{
+			<div class="col-sm-3">
+				<div class="card">
+					<div class="card-body">
+						@if (item.PayCart.PayedPoints != 0)
+						{
+							<h5 class="card-title">Pagado: @item.PayCart.PayedPoints puntos.</h5>
+						}
+						else
+						{
+							<h5 class="card-title">Pagado: $@item.PayCart.PayedMoney</h5>
+						}
+						@foreach (var item1 in item.Pays)
+						{
+							<p class="card-subtitle">Película: @item1.UserBoughtArmChair.Show.Movie.Name</p>
+							@if (item.PayCart.PayedPoints != 0)
+							{
+								<p class="card-subtitle">Precio: @item1.UserBoughtArmChair.Show.PriceInPoints puntos.</p>
+							}
+							else
+							{
+								<p class="card-subtitle">Precio: $@item1.UserBoughtArmChair.Show.Price</p>
+							}
+							<p class="card-subtitle">Decuento: @item1.Discount.Name</p>
+							<p class="card-subtitle">Asiento: @item1.UserBoughtArmChair.ArmChairByRoom.ArmChair.No</p>
+							<p class="card-subtitle">Sala: @item1.UserBoughtArmChair.Show.Room.Name </p>
+							<p class="card-subtitle">Fecha y Hora: @item1.UserBoughtArmChair.Show.DateTime</p>
+						}
+					</div>
+					<div class="card-footer" style="text-align: center;">
+						<a asp-action="CancelPay" asp-controller="Cart" asp-route-id="@item.PayCart.PayCartId" class="btn btn-dark">Cancelar Compra</a>
+					</div>
+					<div class="card-footer" style="text-align: center;">
+						<a asp-action="Print" asp-controller="Cart" asp-route-id="@item.PayCart.PayCartId" class="btn btn-dark">Imprimir Factura</a>
+					</div>
+					</div>
+			</div>
+		}
+	</div>
+</section>

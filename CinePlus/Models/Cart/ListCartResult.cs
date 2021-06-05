@@ -12,5 +12,7 @@ namespace CinePlus.Models
         public double Points { get; set; }
 
         public double PointsTotals { get; set; }
+
+        public double CostMoney { get; set; }
     }
 }
