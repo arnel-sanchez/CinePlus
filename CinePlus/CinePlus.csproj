@@ -24,6 +24,7 @@
     <None Remove="Views\Bilboard\Details.cshtml~RF20327b80.TMP" />
     <None Remove="Views\Bilboard\Details.cshtml~RF257c6493.TMP" />
     <None Remove="Views\Bilboard\Index.cshtml~RF201f08ec.TMP" />
+    <None Remove="Views\Bilboard\Index.cshtml~RF3e0f55b7.TMP" />
     <None Remove="Views\Cart\GetPayCarts.cshtml~RF38b65915.TMP" />
     <None Remove="Views\Cart\GetPayCarts.cshtml~RF38dbaafa.TMP" />
     <None Remove="Views\Cart\Index.cshtml~RF2e9a7d33.TMP" />

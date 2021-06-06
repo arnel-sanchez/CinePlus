@@ -217,5 +217,33 @@ namespace CinePlus.DataAccess
             _context.UserBoughtArmChair.Remove(userBoughtArmChair);
             _context.SaveChanges();
         }
+
+        public PayCart GetPayCartByHashCode(string hash)
+        {
+            return _context.PayCart.Where(x => x.CardHash == hash).FirstOrDefault();
+        }
+
+        public Partner GetPartnerByUserId(string userId)
+        {
+            return _context.Partner.Where(x => x.UserId == userId).FirstOrDefault();
+        }
+
+        public void UpdatePartner(Partner partner)
+        {
+            _context.Partner.Update(partner);
+            _context.SaveChanges();
+        }
+
+        public void DeletePayCart(PayCart payCart)
+        {
+            _context.PayCart.Remove(payCart);
+            _context.SaveChanges();
+        }
+
+        public void DeletePay(Pay pay)
+        {
+            _context.Pay.Remove(pay);
+            _context.SaveChanges();
+        }
     }
 }

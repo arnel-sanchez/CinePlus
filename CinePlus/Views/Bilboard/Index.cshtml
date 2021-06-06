@@ -11,7 +11,18 @@
 			<div class="col-auto">
 				<label class="sr-only" for="inlineFormInputGroup"></label>
 				<div class="input-group mb-2">
-					<input type="date" name="date" class="form-control" id="inlineFormInputGroup" value=@Model.Date>
+					@{ 
+						string today = DateTime.Today.Year.ToString() + "-";
+						if (DateTime.Today.Month < 10)
+							today += "0" + DateTime.Today.Month + "-";
+						else
+							today += DateTime.Today.Month + "-";
+						if (DateTime.Today.Day < 10)
+							today += "0" + DateTime.Today.Day;
+						else
+							today += DateTime.Today.Day;
+					}
+					<input type="date" name="date" class="form-control" id="inlineFormInputGroup" min="@today" value=@Model.Date>
 					<div class="input-group-prepend">
 						<button type="submit" class="btn btn-dark mb-2 rounded-right">Seleccionar</button>
 					</div>

@@ -48,6 +48,7 @@ namespace CinePlus.DataAccess
                 return _context.Show
                     .Include(x => x.Movie)
                     .Include(x => x.Room)
+                    .Where(x=>x.DateTime >= DateTime.Now)
                     .Where(x => x.DateTime.Year == date.Date.Year && x.DateTime.Month == date.Month && x.DateTime.Day == date.Day)
                     .ToList();
             }
@@ -73,6 +74,7 @@ namespace CinePlus.DataAccess
                     .Include(x => x.Movie)
                     .Include(x => x.Room)
                     .Where(x=>x.Movie.Name.Contains(name) || x.Movie.Name==name)
+                    .Where(x=>x.DateTime >= DateTime.Now)
                     .ToList();
             }
             catch (Exception)
@@ -87,6 +89,7 @@ namespace CinePlus.DataAccess
             {
                 return _context.DiscountsByShow
                     .Include(x => x.Discount)
+                    .Where(x=>x.Show.DateTime>=DateTime.Now)
                     .Where(x => x.Show.Movie.Name.Contains(name) || x.Show.Movie.Name == name)
                     .ToList();
             }
@@ -102,6 +105,7 @@ namespace CinePlus.DataAccess
             {
                 return _context.DiscountsByShow
                     .Include(x=>x.Discount)
+                    .Where(x => x.Show.DateTime >= DateTime.Now)
                     .Where(x => x.Show.DateTime.Year == date.Date.Year && x.Show.DateTime.Month == date.Month && x.Show.DateTime.Day == date.Day)
                     .ToList();
             }

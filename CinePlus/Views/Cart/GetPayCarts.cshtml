@@ -38,14 +38,69 @@
 							<p class="card-subtitle">Fecha y Hora: @item1.UserBoughtArmChair.Show.DateTime</p>
 						}
 					</div>
-					<div class="card-footer" style="text-align: center;">
-						<a asp-action="CancelPay" asp-controller="Cart" asp-route-id="@item.PayCart.PayCartId" class="btn btn-dark">Cancelar Compra</a>
-					</div>
+					@if(User.IsInRole(Roles.Partner) && item.PayCart.PayedPoints!=0)
+					{
+						<div class="card-footer" style="text-align: center;">
+							<button data-target="#exampleModal" data-toggle="modal" data-dismiss="modal" class="btn btn-dark">Cancelar Compra</button>
+						</div>
+					}
+					else
+					{
+						<div class="card-footer" style="text-align: center;">
+							<button data-target="#exampleModal1" data-toggle="modal" data-dismiss="modal" class="btn btn-dark">Cancelar Compra</button>
+						</div>
+					}
 					<div class="card-footer" style="text-align: center;">
 						<a asp-action="Print" asp-controller="Cart" asp-route-id="@item.PayCart.PayCartId" class="btn btn-dark">Imprimir Factura</a>
 					</div>
-					</div>
+				</div>
 			</div>
 		}
 	</div>
 </section>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Cancelar Compra</h5>
+				<button type="button" class="btn icon-remove-circle icon-2x" data-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form asp-action="CancelPay" asp-controller="Cart">
+				<div class="modal-body">
+
+					<div class="mb-3">
+						<label class="col-form-label">Inserte el código de Socio para cancelar su compra</label>
+						<input type="number" class="form-control" name="cardOrCode" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="submit" class="btn btn-dark">Cancelar Compra</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Cancelar Compra</h5>
+				<button type="button" class="btn icon-remove-circle icon-2x" data-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form asp-action="CancelPay" asp-controller="Cart">
+				<div class="modal-body">
+
+					<div class="mb-3">
+						<label class="col-form-label">Inserte el número de la tarjeta para cancelar su compra</label>
+						<input type="number" class="form-control" name="cardOrCode" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="submit" class="btn btn-dark">Cancelar Compra</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

@@ -15,7 +15,8 @@ namespace CinePlus.Services
             byte[] messageBytes;
             messageBytes = encoding.GetBytes(line);
             var shHash = SHA256.Create();
-            return shHash.ComputeHash(messageBytes).ToString();
+            var a = encoding.GetString(shHash.ComputeHash(messageBytes));
+            return a.ToString();
         }
     }
 }

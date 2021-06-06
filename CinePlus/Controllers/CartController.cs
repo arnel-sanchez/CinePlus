@@ -175,7 +175,7 @@ namespace CinePlus.Controllers
                         payed += item.DiscountsByShow.Show.Price;
                     }
                 }
-
+                //descontar de la tarjeta del usuario
                 var payCart = new PayCart
                 {
                     DateTime = DateTime.Now,
@@ -212,9 +212,9 @@ namespace CinePlus.Controllers
         public IActionResult PayTicketWithPoints()
         {
             var user = UserManager.FindByNameAsync(User.Identity.Name).Result;
-            var partner = CartRepository.GetPartnerCodeById(user.Id);
+            var partnerCode = CartRepository.GetPartnerCodeById(user.Id);
             var res = CartRepository.GetCartByUserId(user.Id);
-            string hashValue = HasherCard.Hash(partner);
+            string hashValue = HasherCard.Hash(partnerCode);
 
             double payed = 0;
             foreach (var item in res)
@@ -288,13 +288,30 @@ namespace CinePlus.Controllers
         }
 
         [Authorize]
-        public IActionResult CancelPay(string id)
+        [HttpPost]
+        public IActionResult CancelPay(long cardOrCode)
         {
-            if (id == null || id == "")
+            string hashValue = HasherCard.Hash(cardOrCode.ToString());
+            var payCart = CartRepository.GetPayCartByHashCode(hashValue);
+            if(payCart==null)
+                return RedirectToAction("GetPayCarts");
+            var user = UserManager.FindByNameAsync(User.Identity.Name).Result;
+            var pays = CartRepository.GetPayByUserIdAndPayCartId(user.Id, payCart.PayCartId);
+            if(user.Role==Roles.Partner && payCart.PayedPoints!=0)
             {
-                return NotFound();
+                var partner = CartRepository.GetPartnerByUserId(user.Id);
+                partner.Points += payCart.PayedPoints;
+                CartRepository.UpdatePartner(partner);
             }
-            return Ok();
+            //devolver dinero
+            CartRepository.DeletePayCart(payCart);
+            foreach (var item in pays)
+            {
+                item.UserBoughtArmChair.ArmChairByRoom.ArmChair.StateArmChair = StateArmChair.ready;
+                CartRepository.UpdateArmChair(item.UserBoughtArmChair.ArmChairByRoom.ArmChair);
+                CartRepository.DeletePay(item);
+            }
+            return RedirectToAction("GetPayCarts");
         }
     }
 }

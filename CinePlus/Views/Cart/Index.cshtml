@@ -59,9 +59,11 @@
 					Puede pagar las entradas con puntos de socio o con dinero, tiene la libertad de escoger.
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-					<button class="btn btn-dark" data-target="#exampleModalToggle2" data-toggle="modal" data-dismiss="modal">Pagar con Dinero</button>
-					<a asp-action="PayTicketWithPoints" asp-controller="Cart" class="btn btn-dark">Pagar con Puntos de Socio</a>
+					<form asp-action="PayTicketWithPoints" asp-controller="Cart">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+						<button class="btn btn-dark" data-target="#exampleModalToggle2" data-toggle="modal" data-dismiss="modal">Pagar con Dinero</button>
+						<button type="submit" class="btn btn-dark">Pagar con Puntos de Socio</button>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -75,7 +77,6 @@
 				</div>
 				<form asp-action="PayTicketWithMoney" asp-controller="Cart">
 					<div class="modal-body">
-
 						<div class="mb-3">
 							<label class="col-form-label">Inserte la Tarjeta</label>
 							<input type="number" class="form-control" name="Card" />

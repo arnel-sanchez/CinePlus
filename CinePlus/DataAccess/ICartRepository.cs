@@ -61,5 +61,15 @@ namespace CinePlus.DataAccess
         public List<Cart> GetCartsByDate(DateTime date);
 
         public void DeleteUserBoughtArmChairByShowIdAndUserIdAndArmChairId(string showId, string userId, string armChairId);
+
+        public PayCart GetPayCartByHashCode(string hash);
+
+        public Partner GetPartnerByUserId(string userId);
+
+        public void UpdatePartner(Partner partner);
+
+        public void DeletePayCart(PayCart payCart);
+
+        public void DeletePay(Pay pay);
     }
 }
