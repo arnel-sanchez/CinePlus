@@ -8,10 +8,24 @@
 	<link rel="stylesheet" href="~/css/site.css" />
 	<link rel="stylesheet" href="~/css/font-awesome-ie7.css" />
 	<link rel="stylesheet" href="~/css/font-awesome.css" />
+	@if (User.Identity.IsAuthenticated)
+	{
+		<script type="text/javascript">
+			setInterval('loadCount()', 1000);
+			function loadCount() {
+				const xhttp = new XMLHttpRequest();
+				xhttp.onload = function () {
+					document.getElementById("cart").innerHTML = this.responseText;
+				}
+				xhttp.open("GET", "Cart/GetCartCount");
+				xhttp.send();
+			}
+		</script>
+	}
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+	<header>
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
 			<div class="container">
 				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CinePlus</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -24,9 +38,12 @@
 						<li class="nav-item">
 							<a class="nav-link" asp-area="" asp-controller="Bilboard" asp-action="Index">Cartelera</a>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link" asp-area="" asp-controller="Administration" asp-action="Index">Administración</a>
-						</li>
+						@if (User.IsInRole(Roles.Manager))
+						{
+							<li class="nav-item">
+								<a class="nav-link" asp-area="" asp-controller="Administration" asp-action="Index">Administración</a>
+							</li>
+						}
 						<li class="nav-item">
 							<form class="form-inline" asp-controller="Bilboard" asp-action="SearchMovie">
 								<input class="form-control mr-sm-2" type="search" name="search" placeholder="Nombre de la Película" aria-label="Search">
@@ -36,22 +53,22 @@
 					</ul>
 				</div>
 			</div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+		</nav>
+	</header>
+	<div class="container">
+		<main role="main" class="pb-3">
+			@RenderBody()
+		</main>
+	</div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; @DateTime.Today.Year - CinePlus
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
+	<footer class="border-top footer text-muted">
+		<div class="container">
+			&copy; @DateTime.Today.Year - CinePlus
+		</div>
+	</footer>
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	@RenderSection("Scripts", required: false);
 </body>
 </html>

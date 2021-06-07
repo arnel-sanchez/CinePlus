@@ -313,5 +313,12 @@ namespace CinePlus.Controllers
             }
             return RedirectToAction("GetPayCarts");
         }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult GetCartCount()
+        {
+            return Ok(CartRepository.GetCartCout(UserManager.FindByNameAsync(User.Identity.Name).Result.Id));
+        }
     }
 }
