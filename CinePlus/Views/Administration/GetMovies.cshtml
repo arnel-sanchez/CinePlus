@@ -1,0 +1,85 @@
+﻿@model GetMovieResult
+@{
+	ViewData["Title"] = "Películas";
+}
+<section>
+	<div style="padding-left: 30%; padding-right: 30%; padding-bottom: 2%; text-align: center;">
+		<h2>Películas</h2>
+	</div>
+	<form class="form-inline" style="padding-bottom:1%; padding-left:6%; text-align:center;" asp-action="SearchMovie" asp-controller="Administration">
+		<input class="form-control mr-sm-2" type="search" name="name" placeholder="Nombre de la Película" aria-label="Search">
+		<button class="nav-link btn btn-dark" type="submit">Buscar</button>
+		<a class="btn btn-dark" style="margin-left:54%; color:white;" data-target="#exampleModal1" data-toggle="modal" data-dismiss="modal">Crear Película</a>
+	</form>
+	<div style="padding-left: 5%; padding-right: 5%; text-align: center; height:350px; overflow-y: scroll;">
+		<table class="table table-responsive table-bordered">
+			<tr>
+				<th>Nombre</th>
+				<th>Descripción</th>
+				<th>Director</th>
+				<th>Tipo de Película</th>
+				<th>Poster de la Película</th>
+				<th></th>
+			</tr>
+			@foreach (var item in Model.Movie)
+			{
+				<tr>
+					<td>@item.Name</td>
+					<td>@item.Description</td>
+					<td>@item.Director</td>
+					<td>@item.MovieType.Name</td>
+					<td><img style="width:50%;" src="@item.URL" /></td>
+					<td>
+						<form asp-action="DeleteMovie" asp-controller="Administration">
+							<input hidden name="id" value=@item.MovieId />
+							<button type="submit" style="color:red" class="btn btn-color icon-trash"></button>
+						</form>
+					</td>
+				</tr>
+			}
+		</table>
+	</div>
+</section>
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Crear Película</h5>
+				<button type="button" class="btn icon-remove-circle icon-2x" data-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form asp-action="CreateMovie" asp-controller="Administration" style="height: 450px; overflow-y: scroll;">
+				<div class="modal-body">
+					<div class="mb-3">
+						<label class="col-form-label">Nombre de la Película</label>
+						<input class="form-control mr-sm-2" name="Name" type="text" placeholder="Inserte el nombre de la Película" />
+					</div>
+					<div class="mb-3">
+						<label class="col-form-label">Decripción de la Película</label>
+						<textarea class="form-control mr-sm-2" name="Description" placeholder="Inserte la Descripción de la Película"></textarea>
+					</div>
+					<div class="mb-3">
+						<label class="col-form-label">Director de la Película</label>
+						<input class="form-control mr-sm-2" name="Director" type="text" placeholder="Inserte el nombre del director de la Película" />
+					</div>
+					<div class="mb-3">
+						<label class="col-form-label">Tipo de Película</label>
+						<select class="custom-select mr-sm-2" name="MovieTypeId">
+							@foreach (var item in Model.MovieType)
+							{
+								<option value="@item.MovieTypeId">@item.Name</option>
+							}
+						</select>
+					</div>
+					<div class="custom-file mb-3">
+						<label class="custom-file-label">Seleccione el Póster de la Película</label>
+						<input type="file" name="File" class="custom-file-input" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="submit" class="btn btn-dark">Crear</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,45 @@
+﻿@model Stadistics
+@{
+	ViewData["Title"] = "Estadísticas";
+}
+<section>
+	<div style="padding-left: 30%; padding-right: 30%; padding-bottom: 2%; text-align: center;">
+		<h2>Cantidad de Ventas</h2>
+	</div>
+	<form class="form-inline" style="padding-bottom:1%; padding-left:6%; text-align:center;" asp-action="StadisticsByDirector" asp-controller="Administration">
+		<input class="form-control mr-sm-2" type="search" name="name" placeholder="Nombre del Director" aria-label="Search">
+		<button class="nav-link btn btn-dark" type="submit">Ventas del Director</button>
+	</form>
+	<form class="form-inline" style="padding-bottom:1%; padding-left:6%; text-align:center;" asp-action="StadisticsByMovie" asp-controller="Administration">
+		<select class="custom-select mr-sm-2" name="movieId">
+			@foreach (var item in Model.Movies)
+			{
+				<option value="@item.MovieId">@item.Name</option>
+			}
+		</select>
+		<button class="nav-link btn btn-dark" type="submit">Ventas por Película</button>
+	</form>
+	<form class="form-inline" style="padding-bottom:1%; padding-left:6%; text-align:center;" asp-action="StadisticsByMovieType" asp-controller="Administration">
+		<select class="custom-select mr-sm-2" name="movieTypeId">
+			@foreach (var item in Model.MovieTypes)
+			{
+				<option value="@item.MovieTypeId">@item.Name</option>
+			}
+		</select>
+		<button class="nav-link btn btn-dark" type="submit">Ventas del tipo de película</button>
+	</form>
+	<form class="form-inline" style="padding-bottom:1%; padding-left:6%; text-align:center;" asp-action="StadisticsByDate" asp-controller="Administration">
+		<input class="form-control mr-sm-2" type="date" name="date">
+		<button class="nav-link btn btn-dark" type="submit">Ventas del Día</button>
+	</form>
+	<form class="form-inline" style="padding-bottom:1%; padding-left:6%; text-align:center;" asp-action="StadisticsByDateRange" asp-controller="Administration">
+		<input class="form-control mr-sm-2" type="date" name="dateInitial">
+		<input class="form-control mr-sm-2" type="date" name="dateFinal">
+		<button class="nav-link btn btn-dark" type="submit">VEntas en el Rango de Días</button>
+	</form>
+	@if (Model.Name != null)
+	{
+		<h3>@Model.Name</h3>
+		<h4>@Model.Value</h4>
+	}
+</section>

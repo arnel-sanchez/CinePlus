@@ -1,0 +1,103 @@
+﻿@model GetShowsResult
+@{
+	ViewData["Title"] = "Shows";
+}
+<section>
+	<div style="padding-left: 30%; padding-right: 30%; padding-bottom: 2%; text-align: center;">
+		<h2>Shows del día @Model.Date.Day/@Model.Date.Month/@Model.Date.Year</h2>
+	</div>
+	@{ 
+		var res = Model.Date.Year.ToString();
+		if (Model.Date.Month < 10)
+			res += ("-0" + Model.Date.Month);
+		else
+			res += ("-" + Model.Date.Month);
+		if (Model.Date.Day < 10)
+			res += ("-0" + Model.Date.Day);
+		else
+			res += ("-" + Model.Date.Day);
+	}
+	<form class="form-inline" style="padding-bottom:1%; padding-left:6%; text-align:center;" asp-action="GetDate" asp-controller="Administration">
+		<input class="form-control mr-sm-2" type="date" value="@res" name="date" placeholder="Nombre de la Película" aria-label="Search">
+		<button class="nav-link btn btn-dark" type="submit">Buscar</button>
+		<a class="btn btn-dark" style="margin-left:54%; color:white;" data-target="#exampleModal1" data-toggle="modal" data-dismiss="modal">Crear Show</a>
+	</form>
+	<div style="padding-left: 5%; padding-right: 5%; text-align: center; height:350px; overflow-y: scroll;">
+		<table class="table table-responsive table-bordered">
+			<tr>
+				<th>Nombre de la Película</th>
+				<th>Descripción de la Película</th>
+				<th>Hora</th>
+				<th>Sala</th>
+				<th>Precio</th>
+				<th>Precio en Puntos</th>
+				<th></th>
+			</tr>
+			@foreach (var item in Model.Shows)
+			{
+				<tr>
+					<td>@item.Movie.Name</td>
+					<td>@item.Movie.Description</td>
+					<td>@item.DateTime</td>
+					<td>@item.Room.Name</td>
+					<td>@item.Price</td>
+					<td>@item.PriceInPoints</td>
+					<td>
+						<form asp-action="DeleteShow" asp-controller="Administration">
+							<input hidden name="id" value=@item.ShowId />
+							<button type="submit" style="color:red" class="btn btn-color icon-trash"></button>
+						</form>
+					</td>
+				</tr>
+			}
+		</table>
+	</div>
+</section>
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Crear Película</h5>
+				<button type="button" class="btn icon-remove-circle icon-2x" data-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form asp-action="CreateShow" asp-controller="Administration" style="height: 450px; overflow-y: scroll;">
+				<div class="modal-body">
+					<div class="mb-3">
+						<label class="col-form-label">Seleccionar Película</label>
+						<select class="custom-select" name="Movie">
+							@foreach (var item in Model.Movie)
+							{
+								<option value="@item.MovieId">@item.Name</option>
+							}
+						</select>
+					</div>
+					<div class="mb-3">
+						<label class="col-form-label">Seleccionar Sala</label>
+						<select class="custom-select" name="Room">
+							@foreach (var item in Model.Room)
+							{
+								<option value="@item.RoomId">@item.Name</option>
+							}
+						</select>
+					</div>
+					<div class="mb-3">
+						<label class="col-form-label">Precio en Dinero</label>
+						<input class="form-control mr-sm-2" type="number" name="Price">
+					</div>
+					<div class="mb-3">
+						<label class="col-form-label">Precio en Puntos</label>
+						<input class="form-control mr-sm-2" name="PriceInPoints" type="number" />
+					</div>
+					<div class="mb-3">
+						<label class="col-form-label">Fecha y Hora</label>
+						<input class="form-control mr-sm-2" name="Date" type="datetime-local" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="submit" class="btn btn-dark">Crear</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

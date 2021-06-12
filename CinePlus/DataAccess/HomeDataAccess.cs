@@ -23,6 +23,7 @@ namespace CinePlus.DataAccess
                 return _context.MovieOnTop10
                 .Include(x => x.Movie)
                 .Include(x => x.Top10)
+                .OrderBy(x=>x.Top10Id)
                 .ToList();
             }
             catch (Exception)

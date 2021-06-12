@@ -20,7 +20,11 @@
     <None Remove="Areas\Identity\Pages\Account\ResetPassword.cshtml~RF1aaa23e1.TMP" />
     <None Remove="Controllers\BilboardController.cs~RF2eb27704.TMP" />
     <None Remove="Controllers\CartController.cs~RF334fa632.TMP" />
+    <None Remove="Models\Administration\CreateMovieRequest.cs~RF526eb6ec.TMP" />
+    <None Remove="Models\Administration\CreateRoomRequest.cs~RF573d873d.TMP" />
     <None Remove="Services\EmailSender.cs~RF1a2270fd.TMP" />
+    <None Remove="Views\Administration\GetRooms.cshtml~RF575fb06b.TMP" />
+    <None Remove="Views\Administration\GetRooms.cshtml~RF576d350c.TMP" />
     <None Remove="Views\Bilboard\Details.cshtml~RF20327b80.TMP" />
     <None Remove="Views\Bilboard\Details.cshtml~RF257c6493.TMP" />
     <None Remove="Views\Bilboard\Index.cshtml~RF201f08ec.TMP" />

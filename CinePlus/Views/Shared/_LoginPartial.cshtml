@@ -1,8 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using CinePlus.DataAccess
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
-@inject ICartRepository ICartRepository
 
 <ul class="navbar-nav">
 	@if (SignInManager.IsSignedIn(User))

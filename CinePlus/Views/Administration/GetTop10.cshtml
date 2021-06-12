@@ -1,0 +1,109 @@
+﻿@model Top10Model
+@{
+	ViewData["Title"] = "Tops10";
+}
+<section>
+	<div style="padding-left: 30%; padding-right: 30%; padding-bottom: 2%; text-align: center;">
+		<h2>Películas en el Top10: @Model.Top10.Name</h2>
+	</div>
+	<form class="form-inline" style="padding-bottom:1%; padding-left:6%; text-align:center;" asp-action="SearchTop10" asp-controller="Administration">
+		<select class="form-control mr-sm-2" name="id">
+			@foreach (var item in Model.Top10s)
+			{
+				if (item.Top10Id == Model.Top10.Top10Id)
+				{
+					<option selected value="@item.Top10Id">@item.Name</option>
+				}
+				else
+				{
+					<option value="@item.Top10Id">@item.Name</option>
+				}
+			}
+		</select>
+		<button class="nav-link btn btn-dark" type="submit">Buscar</button>
+		@if(Model.MovieOnTop10.Count<10 && Model.MoviesNotAssigned.Count!=0)
+		{
+			<a class="btn btn-dark" style="margin-left:40%; color:white;" data-target="#exampleModal" data-toggle="modal" data-dismiss="modal">Asignar Película</a>
+			<a class="btn btn-dark" style="margin-left:1%;  color:white;" data-target="#exampleModal1" data-toggle="modal" data-dismiss="modal">Crear Top10</a>
+		}
+		else
+		{
+			<a class="btn btn-dark" style="margin-left:54%; color:white;" data-target="#exampleModal1" data-toggle="modal" data-dismiss="modal">Crear Top10</a>
+		}
+	</form>
+	<div style="padding-left: 5%; padding-right: 5%; text-align: center; height:320px; overflow-y: scroll;">
+		<table class="table table-responsive table-bordered">
+			<tr>
+				<th>Nombre</th>
+				<th>Descripción</th>
+				<th>Director</th>
+				<th>Tipo de Película</th>
+				<th></th>
+			</tr>
+			@foreach (var item in Model.MovieOnTop10)
+			{
+				<tr>
+					<td>@item.Movie.Name</td>
+					<td>@item.Movie.Description</td>
+					<td>@item.Movie.Director</td>
+					<td>@item.Movie.MovieType.Name</td>
+					<td>
+						<form asp-action="DeleteOnTop10" asp-controller="Administration">
+							<input hidden name="id" value=@item.MovieOnTop10Id />
+							<button type="submit" style="color:red" class="btn btn-color icon-trash"></button>
+						</form>
+					</td>
+				</tr>
+			}
+		</table>
+	</div>
+</section>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Asignar Película</h5>
+				<button type="button" class="btn icon-remove-circle icon-2x" data-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form asp-action="AddMovie" asp-controller="Administration">
+				<div class="modal-body">
+					<div class="mb-3">
+						<label class="col-form-label">Películas</label>
+						<select class="form-control mr-sm-2" name="id">
+							@foreach (var item in Model.MoviesNotAssigned)
+							{
+								<option value="@item.MovieId">@item.Name</option>
+							}
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="submit" class="btn btn-dark">Seleccionar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Crear Top10</h5>
+				<button type="button" class="btn icon-remove-circle icon-2x" data-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form asp-action="CreateTop10" asp-controller="Administration">
+				<div class="modal-body">
+					<div class="mb-3">
+						<label class="col-form-label">Nombre del Top10</label>
+						<input class="form-control mr-sm-2" name="name" type="text" placeholder="Inserte el nombre del Top10"/>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="submit" class="btn btn-dark">Seleccionar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,173 @@
+﻿@model GetRoomsResult
+@{
+	ViewData["Title"] = "Sala";
+}
+<section>
+	@if (Model.ArmChairByRooms.Count != 0)
+	{
+		<div style="padding-left: 30%; padding-right: 30%; padding-bottom: 2%; text-align: center;">
+			<h2>Sala @Model.ArmChairByRooms[0].Room.Name</h2>
+		</div>
+	}
+	else
+	{
+		<div style="padding-left: 30%; padding-right: 30%; padding-bottom: 2%; text-align: center;">
+			<h2>No existe Sala creada en el Cine Virtual</h2>
+		</div>
+	}
+	<form class="form-inline" style="padding-bottom:1%; padding-left:6%; text-align:center;" asp-action="SelectRoom" asp-controller="Administration">
+		<select class="custom-select" name="id">
+			@foreach (var item in Model.Rooms)
+			{
+				if (Model.ArmChairByRooms.Count != 0 && Model.ArmChairByRooms[0].RoomId == item.RoomId)
+				{
+					<option selected value="@item.RoomId">@item.Name</option>
+				}
+				else
+				{
+					<option value="@item.RoomId">@item.Name</option>
+				}
+			}
+		</select>
+		<button class="nav-link btn btn-dark" type="submit">Seleccionar</button>
+		<a class="btn btn-dark" style="margin-left:45%; color:white;" data-target="#exampleModal2" data-toggle="modal" data-dismiss="modal">Eliminar Sala</a>
+		<a class="btn btn-dark" style="margin-left:1%; color:white;" data-target="#exampleModal1" data-toggle="modal" data-dismiss="modal">Crear Sala</a>
+	</form>
+	<div style="padding-left: 5%; padding-right: 5%; text-align: center; height:350px; overflow-y: scroll;">
+		<div class="card-deck">
+			@for (int i = 0; i < Model.ArmChairByRooms.Count; i++)
+			{
+				if (Model.ArmChairByRooms[i].ArmChair.StateArmChair == StateArmChair.sold)
+				{
+					<div style="position: relative; width: 6rem;">
+						<img src="~/img/armchair.png" style="width: 6rem;" />
+						<div style="position: absolute; top: 0px; left: 0px; width: 0; height: 0; border-top: 100px solid transparent; border-right: 100px solid transparent;">
+							<div style="color: black; position: relative; top: -70px; left: 15px; font-weight: bold; padding: 5px; transform: rotate(-45deg);">
+								Ocupado
+							</div>
+						</div>
+						<h6>@(i + 1)</h6>
+					</div>
+				}
+				else if (Model.ArmChairByRooms[i].ArmChair.StateArmChair == StateArmChair.broken)
+				{
+					<div style="position: relative; width: 6rem;">
+						<a style="width: 6rem;" data-target="@string.Concat("#modal",Model.ArmChairByRooms[i].ArmChair.No)" data-toggle="modal" data-dismiss="modal">
+							<img src="~/img/armchair.png" style="width: 6rem;" />
+							<div style="position: absolute; top: 0px; left: 0px; width: 0; height: 0; border-top: 100px solid transparent; border-right: 100px solid transparent;">
+								<div style="color: black; position: relative; top: -70px; left: 15px; font-weight: bold; padding: 5px; transform: rotate(-45deg);">
+									Roto
+								</div>
+							</div>
+							<h6>@(i + 1)</h6>
+						</a>
+					</div>
+				}
+				else
+				{
+					<div>
+						<a style="width: 6rem;" data-target="@string.Concat("#modal",Model.ArmChairByRooms[i].ArmChair.No)" data-toggle="modal" data-dismiss="modal">
+							<img src="~/img/armchair.png" style="width: 6rem;" />
+							<h6>@(i+1)</h6>
+						</a>
+					</div>
+				}
+			}
+		</div>
+	</div>
+</section>
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Crear Sala</h5>
+				<button type="button" class="btn icon-remove-circle icon-2x" data-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form asp-action="CreateRoom" asp-controller="Administration">
+				<div class="modal-body">
+					<div class="mb-3">
+						<label class="col-form-label">Nombre de la Sala</label>
+						<input class="form-control mr-sm-2" name="Name" type="text" placeholder="Inserte el nombre de la Sala" />
+					</div>
+					<div class="mb-3">
+						<label class="col-form-label">Cantidad de Butacas</label>
+						<input class="form-control mr-sm-2" name="ArmChairs" type="number" placeholder="Inserte la cantidad de butacas de la Sala" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="submit" class="btn btn-dark">Crear</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Eliminar Sala</h5>
+				<button type="button" class="btn icon-remove-circle icon-2x" data-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form asp-action="DeleteRoom" asp-controller="Administration">
+				<div class="modal-body">
+					<div class="mb-3">
+						<label class="col-form-label">Seleccine la Sala</label>
+						<select class="custom-select" name="id">
+							@foreach (var item in Model.Rooms)
+							{
+								<option value="@item.RoomId">@item.Name</option>
+							}
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+					<button type="submit" class="btn btn-dark">Eliminar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@foreach (var item in Model.ArmChairByRooms)
+{
+	if (item.ArmChair.StateArmChair != StateArmChair.sold)
+	{
+		<div class="modal fade" id="@string.Concat("modal",item.ArmChair.No)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Modificar Estado de la Butaca</h5>
+						<button type="button" class="btn icon-remove-circle icon-2x" data-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<form asp-action="MarkArmChair" asp-controller="Administration">
+						<div class="modal-body">
+							<div class="mb-3">
+								<input hidden name="id" value="@item.ArmChairId"/>
+								<label class="col-form-label">Estado</label>
+								<select class="custom-select" name="state">
+									@if (item.ArmChair.StateArmChair == StateArmChair.broken)
+									{
+										<option selected value="@StateArmChair.broken">Rota</option>
+										<option value="@StateArmChair.ready">En Buen Estado</option>
+									}
+									else
+									{
+										<option value="@StateArmChair.broken">Rota</option>
+										<option selected value="@StateArmChair.ready">En Buen Estado</option>
+									}
+								</select>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+							<button type="submit" class="btn btn-dark">Cambiar Estado</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	}
+}

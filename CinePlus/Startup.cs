@@ -61,10 +61,13 @@ namespace CinePlus
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
+            services.AddTransient<IImageWriter, ImageWriter>();
+            services.AddScoped<IImageHandler, ImageHandler>();
             services.AddScoped<IHomeRepository, HomeDataAccess>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IBilboardRepository,BilboardDataAccess>();
             services.AddScoped<ICartRepository, CartDataAccess>();
+            services.AddScoped<IAdministrationRepository, AdministrationDataAccess>();
             services.AddQuartz(q =>
             {
                 q.UseMicrosoftDependencyInjectionScopedJobFactory();

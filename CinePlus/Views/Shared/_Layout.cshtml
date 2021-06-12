@@ -40,8 +40,17 @@
 						</li>
 						@if (User.IsInRole(Roles.Manager))
 						{
-							<li class="nav-item">
-								<a class="nav-link" asp-area="" asp-controller="Administration" asp-action="Index">Administración</a>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Administración
+								</a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+									<a class="dropdown-item" asp-action="GetTop10" asp-controller="Administration">Top10</a>
+									<a class="dropdown-item" asp-action="GetShows" asp-controller="Administration">Shows</a>
+									<a class="dropdown-item" asp-action="GetMovies" asp-controller="Administration">Películas</a>
+									<a class="dropdown-item" asp-action="GetRooms" asp-controller="Administration">Salas</a>
+									<a class="dropdown-item" asp-action="Stadistics" asp-controller="Administration">Estadísticas de ventas</a>
+								</div>
 							</li>
 						}
 						<li class="nav-item">
