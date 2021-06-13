@@ -64,6 +64,7 @@ namespace CinePlus
             services.AddTransient<IImageWriter, ImageWriter>();
             services.AddScoped<IImageHandler, ImageHandler>();
             services.AddScoped<IHomeRepository, HomeDataAccess>();
+            services.AddScoped<IAuthRepository, AuthDataAccess>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IBilboardRepository,BilboardDataAccess>();
             services.AddScoped<ICartRepository, CartDataAccess>();

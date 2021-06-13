@@ -12,14 +12,12 @@ namespace CinePlus.Controllers
 {
     public class BilboardController : Controller
     {
-        private ILogger<BilboardController> Logger;
         private IBilboardRepository BilboardRepository;
         private static DateTime DateTime = DateTime.Today;
         private static string Search="";
 
-        public BilboardController(ILogger<BilboardController> logger, IBilboardRepository bilboardRepository)
+        public BilboardController(IBilboardRepository bilboardRepository)
         {
-            Logger = logger;
             BilboardRepository = bilboardRepository;
         }
 
@@ -62,7 +60,7 @@ namespace CinePlus.Controllers
 
         public IActionResult Details(string id)
         {
-            if (id == "" || id == null)
+            if (string.IsNullOrEmpty(id))
                 return NotFound();
             var movie = BilboardRepository.GetMovieById(id);
             if (movie == null)

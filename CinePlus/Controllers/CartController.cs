@@ -77,7 +77,7 @@ namespace CinePlus.Controllers
         [Authorize]
         public IActionResult SelectArmChair(string id)
         {
-            if (id == null || id == "")
+            if (string.IsNullOrEmpty(id))
                 return NotFound();
             var res = new SelectArmChairResult
             {
@@ -92,7 +92,7 @@ namespace CinePlus.Controllers
         [Route("/Cart/AddArmChair",Name = "addCart")]
         public IActionResult AddArmChair(string armChairId, string showId)
         {
-            if(armChairId=="" || armChairId==null || showId=="" || showId==null)
+            if(string.IsNullOrEmpty(armChairId) || string.IsNullOrEmpty(showId))
             {
                 return NotFound();
             }
@@ -103,7 +103,7 @@ namespace CinePlus.Controllers
         [Authorize]
         public IActionResult SelectDiscount(string armChairId, string discountByShowId)
         {
-            if (armChairId == "" || armChairId == null || discountByShowId == "" || discountByShowId == null)
+            if (string.IsNullOrEmpty(armChairId) || string.IsNullOrEmpty(discountByShowId))
             {
                 return NotFound();
             }
@@ -135,7 +135,7 @@ namespace CinePlus.Controllers
         [Authorize]
         public IActionResult QuitArmChair(string id)
         {
-            if (id == "" || id == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
@@ -203,7 +203,12 @@ namespace CinePlus.Controllers
                     CartRepository.AddPay(pay);
                     CartRepository.DeleteCartById(item.CartId);
                 }
+                Logger.LogInformation("Pay with money.");
             }
+            var a = ModelState.Values.GetEnumerator();
+            var b = a.Current.Errors.GetEnumerator();
+            b.MoveNext();
+            Logger.LogError(b.Current.ErrorMessage);
             return RedirectToAction("Index");
         }
 
@@ -256,7 +261,12 @@ namespace CinePlus.Controllers
                 };
                 CartRepository.AddPay(pay);
                 CartRepository.DeleteCartById(item.CartId);
+                Logger.LogInformation("Pay with money.");
             }
+            var a = ModelState.Values.GetEnumerator();
+            var b = a.Current.Errors.GetEnumerator();
+            b.MoveNext();
+            Logger.LogError(b.Current.ErrorMessage);
             return RedirectToAction("Index");
         }
 
@@ -277,7 +287,7 @@ namespace CinePlus.Controllers
         [Authorize]
         public IActionResult Print(string id)
         {
-            if(id == null || id == "")
+            if(string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
@@ -294,7 +304,9 @@ namespace CinePlus.Controllers
             string hashValue = HasherCard.Hash(cardOrCode.ToString());
             var payCart = CartRepository.GetPayCartByHashCode(hashValue);
             if(payCart==null)
+            {
                 return RedirectToAction("GetPayCarts");
+            }
             var user = UserManager.FindByNameAsync(User.Identity.Name).Result;
             var pays = CartRepository.GetPayByUserIdAndPayCartId(user.Id, payCart.PayCartId);
             if(user.Role==Roles.Partner && payCart.PayedPoints!=0)

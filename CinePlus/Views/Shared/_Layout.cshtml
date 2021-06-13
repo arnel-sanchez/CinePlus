@@ -17,7 +17,7 @@
 				xhttp.onload = function () {
 					document.getElementById("cart").innerHTML = this.responseText;
 				}
-				xhttp.open("GET", "Cart/GetCartCount");
+				xhttp.open("GET", "/Cart/GetCartCount");
 				xhttp.send();
 			}
 		</script>
@@ -36,7 +36,7 @@
 					<partial name="_LoginPartial" />
 					<ul class="navbar-nav flex-grow-1">
 						<li class="nav-item">
-							<a class="nav-link" asp-area="" asp-controller="Bilboard" asp-action="Index">Cartelera</a>
+							<a class="nav-link" asp-controller="Bilboard" asp-action="Index">Cartelera</a>
 						</li>
 						@if (User.IsInRole(Roles.Manager))
 						{

@@ -12,12 +12,10 @@ namespace CinePlus.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IHomeRepository _context;
 
-        public HomeController(ILogger<HomeController> logger, IHomeRepository context)
+        public HomeController(IHomeRepository context)
         {
-            _logger = logger;
             _context = context;
         }
 

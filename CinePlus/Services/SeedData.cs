@@ -349,7 +349,7 @@ namespace CinePlus.Services
                     var armChair = new ArmChair
                     {
                         ArmChairId = id+"-"+Guid.NewGuid().ToString(),
-                        No = (i+1).ToString(),
+                        No = i+1,
                         StateArmChair = StateArmChair.ready,
                     };
                     var armChairByRoom = new ArmChairByRoom

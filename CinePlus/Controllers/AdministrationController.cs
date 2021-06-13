@@ -59,7 +59,7 @@ namespace CinePlus.Controllers
         [HttpPost]
         public IActionResult SearchTop10(string id)
         {
-            if (id == "" || id == null)
+            if (string.IsNullOrEmpty(id))
                 return NotFound();
             Top10Id = id;
             return RedirectToAction("GetTop10");
@@ -68,7 +68,7 @@ namespace CinePlus.Controllers
         [HttpPost]
         public IActionResult DeleteOnTop10(string id)
         {
-            if (id == "" || id == null)
+            if (string.IsNullOrEmpty(id))
                 return NotFound();
             AdministrationRepository.DeleteMovieOnTop10ById(id);
             return RedirectToAction("GetTop10");
@@ -77,7 +77,7 @@ namespace CinePlus.Controllers
         [HttpPost]
         public IActionResult CreateTop10(string name)
         {
-            if (name == null || name == "")
+            if (string.IsNullOrEmpty(name))
                 return NotFound();
             var top = new Top10
             {
@@ -91,7 +91,7 @@ namespace CinePlus.Controllers
         [HttpPost]
         public IActionResult AddMovie(string id)
         {
-            if (id == "" || id == null)
+            if (string.IsNullOrEmpty(id))
                 return NotFound();
             if(Top10Id == null || Top10Id == "")
             {
@@ -140,7 +140,7 @@ namespace CinePlus.Controllers
 
         public IActionResult GetDate(DateTime date)
         {
-            if (date == null)
+            if (date == default)
                 return NotFound();
             Date = date;
             return RedirectToAction("GetShows");
@@ -163,13 +163,17 @@ namespace CinePlus.Controllers
                 AdministrationRepository.AddShow(show);
                 return RedirectToAction("GetShows");
             }
-            return NotFound();
+            var a = ModelState.Values.GetEnumerator();
+            var b = a.Current.Errors.GetEnumerator();
+            b.MoveNext();
+            Logger.LogError(b.Current.ErrorMessage);
+            return View("Getshows");
         }
 
         [HttpPost]
         public IActionResult DeleteShow(string id)
         {
-            if (id == null || id == "")
+            if (string.IsNullOrEmpty(id))
                 return NotFound();
             AdministrationRepository.DeleteShowById(id);
             return RedirectToAction("GetShows");
@@ -181,7 +185,7 @@ namespace CinePlus.Controllers
         public IActionResult GetMovies()
         {
             GetMovieResult res = new GetMovieResult();
-            if(MovieName=="" || MovieName==null)
+            if(string.IsNullOrEmpty(MovieName))
             {
                 res.Movie = AdministrationRepository.GetMovies();
             }
@@ -195,6 +199,8 @@ namespace CinePlus.Controllers
 
         public IActionResult SearchMovie(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                return NotFound();
             MovieName = name;
             return RedirectToAction("GetMovies");
         }
@@ -226,13 +232,17 @@ namespace CinePlus.Controllers
                 AdministrationRepository.AddMovie(movie);
                 return RedirectToAction("GetMovies");
             }
-            return View();
+            var a = ModelState.Values.GetEnumerator();
+            var b = a.Current.Errors.GetEnumerator();
+            b.MoveNext();
+            Logger.LogError(b.Current.ErrorMessage);
+            return View("GetMovies");
         }
 
         [HttpPost]
         public IActionResult DeleteMovie(string id)
         {
-            if (id == "" || id == null)
+            if (string.IsNullOrEmpty(id))
                 return NotFound();
             AdministrationRepository.DeleteMovie(id);
             return RedirectToAction("GetMovies");
@@ -242,7 +252,7 @@ namespace CinePlus.Controllers
         #region Rooms
         public IActionResult GetRooms()
         {   
-            if(RoomId=="" || RoomId==null)
+            if(string.IsNullOrEmpty(RoomId))
             {
                 var res = new GetRoomsResult
                 {
@@ -265,7 +275,7 @@ namespace CinePlus.Controllers
         [HttpPost]
         public IActionResult SelectRoom(string id)
         {
-            if (id == null || id == "")
+            if (string.IsNullOrEmpty(id))
                 return NotFound();
             RoomId = id;
             return RedirectToAction("GetRooms");
@@ -288,7 +298,7 @@ namespace CinePlus.Controllers
                     ArmChair armChair = new ArmChair
                     {
                         ArmChairId = Guid.NewGuid().ToString(),
-                        No = (i + 1).ToString(),
+                        No = i + 1,
                         StateArmChair = StateArmChair.ready
                     };
                     ArmChairByRoom armChairByRoom = new ArmChairByRoom
@@ -301,13 +311,17 @@ namespace CinePlus.Controllers
                     AdministrationRepository.AddArmChairByRoom(armChairByRoom);
                 }
             }
+            var a = ModelState.Values.GetEnumerator();
+            var b = a.Current.Errors.GetEnumerator();
+            b.MoveNext();
+            Logger.LogError(b.Current.ErrorMessage);
             return RedirectToAction("GetRooms");
         }
 
         [HttpPost]
         public IActionResult DeleteRoom(string id)
         {
-            if (id == "" || id == null)
+            if (string.IsNullOrEmpty(id))
                 return NotFound();
             AdministrationRepository.DeleteRoomById(id);
             return RedirectToAction("GetRooms");
@@ -315,7 +329,7 @@ namespace CinePlus.Controllers
 
         public IActionResult MarkArmChair(string id, StateArmChair state)
         {
-            if (id == null || id == "")
+            if (string.IsNullOrEmpty(id))
                 return NotFound();
             AdministrationRepository.MarkArmChairById(id, state);
             return RedirectToAction("GetRooms");
@@ -340,7 +354,7 @@ namespace CinePlus.Controllers
         [HttpPost]
         public IActionResult StadisticsByDirector(string name)
         {
-            if (name == "" || name == null)
+            if (string.IsNullOrEmpty(name))
                 return NotFound();
             var res = new Stadistics
             {
@@ -355,7 +369,7 @@ namespace CinePlus.Controllers
         [HttpPost]
         public IActionResult StadisticsByMovie(string movieId)
         {
-            if (movieId == "" || movieId == null)
+            if (string.IsNullOrEmpty(movieId))
                 return NotFound();
             var res = new Stadistics
             {
@@ -370,7 +384,7 @@ namespace CinePlus.Controllers
         [HttpPost]
         public IActionResult StadisticsByMovieType(string movieTypeId)
         {
-            if (movieTypeId == "" || movieTypeId == null)
+            if (string.IsNullOrEmpty(movieTypeId))
                 return NotFound();
             var res = new Stadistics
             {
@@ -385,6 +399,8 @@ namespace CinePlus.Controllers
         [HttpPost]
         public IActionResult StadisticsByDate(DateTime date)
         {
+            if (date == default)
+                return NotFound();
             var res = new Stadistics
             {
                 Movies = AdministrationRepository.GetMovies(),
@@ -398,6 +414,8 @@ namespace CinePlus.Controllers
         [HttpPost]
         public IActionResult StadisticsByDateRange(DateTime dateInitial, DateTime dateFinal)
         {
+            if (dateFinal == default || dateInitial == default)
+                return NotFound();
             var res = new Stadistics
             {
                 Movies = AdministrationRepository.GetMovies(),

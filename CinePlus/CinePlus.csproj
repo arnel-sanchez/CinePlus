@@ -19,6 +19,7 @@
     <None Remove="Areas\Identity\Pages\Account\Register.cshtml~RF16023b57.TMP" />
     <None Remove="Areas\Identity\Pages\Account\ResetPassword.cshtml~RF1aaa23e1.TMP" />
     <None Remove="Controllers\BilboardController.cs~RF2eb27704.TMP" />
+    <None Remove="Controllers\BilboardController.cs~RF62ff06d1.TMP" />
     <None Remove="Controllers\CartController.cs~RF334fa632.TMP" />
     <None Remove="Models\Administration\CreateMovieRequest.cs~RF526eb6ec.TMP" />
     <None Remove="Models\Administration\CreateRoomRequest.cs~RF573d873d.TMP" />
