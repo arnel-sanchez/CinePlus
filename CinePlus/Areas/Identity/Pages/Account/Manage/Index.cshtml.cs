@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using CinePlus.DataAccess;
 using CinePlus.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,16 +16,19 @@ namespace CinePlus.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IAuthRepository _authRepository;
         private readonly ILogger<IndexModel> _logger;
 
         public IndexModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
+            IAuthRepository authRepository,
             ILogger<IndexModel> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _authRepository = authRepository;
         }
 
         public string Username { get; set; }
@@ -48,6 +52,11 @@ namespace CinePlus.Areas.Identity.Pages.Account.Manage
             [Required]
             [DataType(DataType.Text)]
             public string LastName { get; set; }
+
+            [DataType(DataType.Text)]
+            public string Code { get; set; }
+
+            public double Points { get; set; }
         }
 
         private async Task LoadAsync(User user)
@@ -56,13 +65,25 @@ namespace CinePlus.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
-
-            Input = new InputModel
+            if(user.Role==Roles.Partner)
             {
-                PhoneNumber = phoneNumber,
-                Name = user.Name,
-                LastName = user.LastName
-            };
+                Input = new InputModel
+                {
+                    PhoneNumber = phoneNumber,
+                    Name = user.Name,
+                    LastName = user.LastName,
+                    Code = _authRepository.GetPartnerById(user.Id).Code
+                };
+            }
+            else
+            {
+                Input = new InputModel
+                {
+                    PhoneNumber = phoneNumber,
+                    Name = user.Name,
+                    LastName = user.LastName
+                };
+            }
         }
 
         public async Task<IActionResult> OnGetAsync()

@@ -204,6 +204,7 @@ namespace CinePlus.Controllers
                     CartRepository.DeleteCartById(item.CartId);
                 }
                 Logger.LogInformation("Pay with money.");
+                return RedirectToAction("Index");
             }
             var a = ModelState.Values.GetEnumerator();
             var b = a.Current.Errors.GetEnumerator();
@@ -263,10 +264,6 @@ namespace CinePlus.Controllers
                 CartRepository.DeleteCartById(item.CartId);
                 Logger.LogInformation("Pay with money.");
             }
-            var a = ModelState.Values.GetEnumerator();
-            var b = a.Current.Errors.GetEnumerator();
-            b.MoveNext();
-            Logger.LogError(b.Current.ErrorMessage);
             return RedirectToAction("Index");
         }
 

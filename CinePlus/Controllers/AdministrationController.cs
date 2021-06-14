@@ -117,12 +117,6 @@ namespace CinePlus.Controllers
             }
             return RedirectToAction("GetTop10");
         }
-
-        [HttpPost]
-        public IActionResult CreateTop10Request()
-        {
-            return Ok();
-        }
         #endregion
 
         #region Shows
@@ -217,7 +211,7 @@ namespace CinePlus.Controllers
                 }
                 else
                 {
-                    url = await ImageHandler.UploadImage(request.File); ;
+                    url = await ImageHandler.UploadImage(request.File);
                 }
                 var movie = new Movie
                 {
@@ -310,6 +304,7 @@ namespace CinePlus.Controllers
                     AdministrationRepository.AddArmChair(armChair);
                     AdministrationRepository.AddArmChairByRoom(armChairByRoom);
                 }
+                return RedirectToAction("GetRooms");
             }
             var a = ModelState.Values.GetEnumerator();
             var b = a.Current.Errors.GetEnumerator();

@@ -17,11 +17,13 @@ namespace CinePlus.Areas.Identity.Pages.Account
     public class ConfirmEmailModel : PageModel
     {
         private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly ILogger<ConfirmEmailModel> _logger;
 
-        public ConfirmEmailModel(UserManager<User> userManager, ILogger<ConfirmEmailModel> logger)
+        public ConfirmEmailModel(SignInManager<User> signInManager, UserManager<User> userManager, ILogger<ConfirmEmailModel> logger)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _logger = logger;
         }
 
@@ -52,6 +54,8 @@ namespace CinePlus.Areas.Identity.Pages.Account
             {
                 _logger.LogInformation("Email confirmado satisfactoriamente.");
                 StatusMessage = "Email confirmado satisfactoriamente.";
+                await _signInManager.SignInAsync(user,true);
+                return RedirectToAction("Index", "Home");
             }
             else
             {

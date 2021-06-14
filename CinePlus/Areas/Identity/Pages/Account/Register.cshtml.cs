@@ -118,14 +118,10 @@ namespace CinePlus.Areas.Identity.Pages.Account
                     await _userManager.AddToRoleAsync(user, role);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
+                    var callbackUrl = "https://localhost:5001/Identity/Account/ConfirmEmail?userId=" + user.Id + "&code=" + code;
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirme su Email",
-                        $"Por favor, confirme su cuenta haciendo click aquí: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Confirmar Cuenta</a>.");
+                        $"Por favor, confirme su cuenta haciendo click aquí: <a href='{callbackUrl}'>Confirmar Cuenta</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

@@ -31,7 +31,18 @@
 					<input asp-for="Input.PhoneNumber" class="form-control" />
 					<span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
 				</div>
-				<button id="update-profile-button" type="submit" class="btn btn-primary">Aceptar</button>
+				@if (User.IsInRole(Roles.Partner))
+				{
+					<div class="form-group">
+						<label asp-for="Input.Code">Código de Socio</label>
+						<input asp-for="Input.Code" class="form-control" disabled />
+					</div>
+					<div class="form-group">
+						<label asp-for="Input.Points">Puntos de Socio</label>
+						<input asp-for="Input.Points" class="form-control" disabled />
+					</div>
+				}
+				<button id="update-profile-button" type="submit" class="btn btn-dark">Aceptar</button>
 			</form>
 		</div>
 	</div>
