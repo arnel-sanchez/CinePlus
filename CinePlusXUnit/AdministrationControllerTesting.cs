@@ -196,7 +196,6 @@ namespace CinePlusXUnit
         }
 
 
-        // Falta  public async Task<IActionResult> CreateMovie(CreateMovieRequest request) por testear 
         [Fact]
         public void CreateMovieNotNullFileTest()
         {
