@@ -341,14 +341,9 @@ namespace CinePlus.Services
                 };
                 for (int i = 0; i < 200; i++)
                 {
-                    string id = "";
-                    if (i + 1 < 10)
-                        id = "00" + (i+1).ToString();
-                    else if (i + 1 < 100)
-                        id = "0" + (i+i).ToString();
                     var armChair = new ArmChair
                     {
-                        ArmChairId = id+"-"+Guid.NewGuid().ToString(),
+                        ArmChairId = Guid.NewGuid().ToString(),
                         No = i+1,
                         StateArmChair = StateArmChair.ready,
                     };
@@ -380,7 +375,7 @@ namespace CinePlus.Services
                 {
                     Room = room,
                     RoomId = room.RoomId,
-                    DateTime = DateTime.Now,
+                    DateTime = DateTime.Now.AddHours(5),
                     Price = 50,
                     PriceInPoints = 20,
                     ShowId = Guid.NewGuid().ToString(),
@@ -415,7 +410,7 @@ namespace CinePlus.Services
                 {
                     Room = room,
                     RoomId = room.RoomId,
-                    DateTime = DateTime.Now,
+                    DateTime = DateTime.Now.AddHours(5),
                     Price = 20,
                     PriceInPoints = 20,
                     ShowId = Guid.NewGuid().ToString(),
@@ -448,7 +443,7 @@ namespace CinePlus.Services
                 {
                     Room = room,
                     RoomId = room.RoomId,
-                    DateTime = DateTime.Now,
+                    DateTime = DateTime.Now.AddHours(5),
                     Price = 20,
                     PriceInPoints = 20,
                     ShowId = Guid.NewGuid().ToString(),
@@ -481,7 +476,7 @@ namespace CinePlus.Services
                 {
                     Room = room,
                     RoomId = room.RoomId,
-                    DateTime = DateTime.Now,
+                    DateTime = DateTime.Now.AddHours(5),
                     Price = 20,
                     PriceInPoints = 20,
                     ShowId = Guid.NewGuid().ToString(),
@@ -514,7 +509,7 @@ namespace CinePlus.Services
                 {
                     Room = room,
                     RoomId = room.RoomId,
-                    DateTime = DateTime.Now,
+                    DateTime = DateTime.Now.AddHours(5),
                     Price = 20,
                     PriceInPoints = 20,
                     ShowId = Guid.NewGuid().ToString(),
