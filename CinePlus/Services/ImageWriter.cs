@@ -38,7 +38,7 @@ namespace CinePlus.Services
             {
                 var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
                 fileName = Guid.NewGuid().ToString() + extension; //Create a new Name for the file due to security reasons.
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", fileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", fileName);
 
                 using (var bits = new FileStream(path, FileMode.Create))
                 {
@@ -50,7 +50,7 @@ namespace CinePlus.Services
                 return e.Message;
             }
 
-            return "./img/"+fileName;
+            return "https://localhost:44304/img/" + fileName;
         }
     }
 }

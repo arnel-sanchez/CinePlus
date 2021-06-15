@@ -47,7 +47,7 @@
 				<h5 class="modal-title" id="exampleModalLabel">Crear Película</h5>
 				<button type="button" class="btn icon-remove-circle icon-2x" data-dismiss="modal" aria-label="Close"></button>
 			</div>
-			<form asp-action="CreateMovie" asp-controller="Administration" style="height: 450px; overflow-y: scroll;">
+			<form enctype="multipart/form-data" asp-action="CreateMovie" asp-controller="Administration" style="height: 450px; overflow-y: scroll;" method="post">
 				<div class="modal-body">
 					<div class="mb-3">
 						<label class="col-form-label">Nombre de la Película</label>

@@ -157,10 +157,13 @@ namespace CinePlus.Controllers
                 AdministrationRepository.AddShow(show);
                 return RedirectToAction("GetShows");
             }
-            var a = ModelState.Values.GetEnumerator();
-            var b = a.Current.Errors.GetEnumerator();
-            b.MoveNext();
-            Logger.LogError(b.Current.ErrorMessage);
+            foreach (var error in ModelState.Values)
+            {
+                foreach (var item in error.Errors)
+                {
+                    Logger.LogError(item.ErrorMessage);
+                }
+            }
             return View("Getshows");
         }
 
@@ -226,10 +229,13 @@ namespace CinePlus.Controllers
                 AdministrationRepository.AddMovie(movie);
                 return RedirectToAction("GetMovies");
             }
-            var a = ModelState.Values.GetEnumerator();
-            var b = a.Current.Errors.GetEnumerator();
-            b.MoveNext();
-            Logger.LogError(b.Current.ErrorMessage);
+            foreach (var error in ModelState.Values)
+            {
+                foreach (var item in error.Errors)
+                {
+                    Logger.LogError(item.ErrorMessage);
+                }
+            }
             return View("GetMovies");
         }
 
@@ -306,10 +312,13 @@ namespace CinePlus.Controllers
                 }
                 return RedirectToAction("GetRooms");
             }
-            var a = ModelState.Values.GetEnumerator();
-            var b = a.Current.Errors.GetEnumerator();
-            b.MoveNext();
-            Logger.LogError(b.Current.ErrorMessage);
+            foreach (var error in ModelState.Values)
+            {
+                foreach (var item in error.Errors)
+                {
+                    Logger.LogError(item.ErrorMessage);
+                }
+            }
             return RedirectToAction("GetRooms");
         }
 

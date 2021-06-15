@@ -207,10 +207,13 @@ namespace CinePlus.Controllers
                 Logger.LogInformation("Pay with money.");
                 return RedirectToAction("Index");
             }
-            var a = ModelState.Values.GetEnumerator();
-            var b = a.Current.Errors.GetEnumerator();
-            b.MoveNext();
-            Logger.LogError(b.Current.ErrorMessage);
+            foreach (var error in ModelState.Values)
+            {
+                foreach (var item in error.Errors)
+                {
+                    Logger.LogError(item.ErrorMessage);
+                }
+            }
             return RedirectToAction("Index");
         }
 

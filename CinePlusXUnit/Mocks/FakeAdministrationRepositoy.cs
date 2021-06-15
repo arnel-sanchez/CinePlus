@@ -120,11 +120,6 @@ namespace CinePlusXUnit.Mocks
             
         }
 
-        public void MarkArmChairById(string id, StateArmChair state)
-        {
-           
-        }
-
         public void AddRoom(Room room)
         {
             
@@ -163,6 +158,11 @@ namespace CinePlusXUnit.Mocks
         public int StadisticsByDateRange(DateTime dateInitial, DateTime dateFinal)
         {
             return 8;
+        }
+
+        public void MarkArmChairByRoomIdAndArmChairId(string armChairId, string roomId, StateArmChair state)
+        {
+            
         }
     }
 }

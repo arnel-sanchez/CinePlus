@@ -88,11 +88,13 @@ namespace CinePlusXUnit
         }
 
         [Theory]
-        [InlineData("", "any")]
-        [InlineData(null, "any")]
-        [InlineData("any", null)]
-        [InlineData("any", "")]
-        public void SelectDiscountNotFoundTest(string armChairId, string discountByShowId)
+        [InlineData("", "any", "any")]
+        [InlineData(null, "any", "any")]
+        [InlineData("any", null, "any")]
+        [InlineData("any", "", "any")]
+        [InlineData("any", "any", null)]
+        [InlineData("any", "any", "")]
+        public void SelectDiscountNotFoundTest(string armChairId, string showId, string discountByShowId)
         {
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
             {
@@ -109,7 +111,7 @@ namespace CinePlusXUnit
                 }
             };
 
-            IActionResult selectDiscount = cart.SelectDiscount(armChairId, discountByShowId);
+            IActionResult selectDiscount = cart.SelectDiscount(armChairId, showId, discountByShowId);
             Assert.IsType<NotFoundResult>(selectDiscount);
         }
 
@@ -131,7 +133,7 @@ namespace CinePlusXUnit
                 }
             };
 
-            IActionResult selectDiscount = cart.SelectDiscount("armId", "discountId");
+            IActionResult selectDiscount = cart.SelectDiscount("armId", "showId", "discountId");
             Assert.IsType<RedirectToActionResult>(selectDiscount);
         }
 

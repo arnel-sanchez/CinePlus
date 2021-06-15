@@ -302,18 +302,20 @@ namespace CinePlusXUnit
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(null)]
-        public void MarkArmChairNotFoundTest(string id)
+        [InlineData("", "any")]
+        [InlineData(null, "any")]
+        [InlineData("any", "")]
+        [InlineData("any", null)]
+        public void MarkArmChairNotFoundTest(string armChairId, string roomId)
         {
-            IActionResult markArmChair = administration.MarkArmChair(id, StateArmChair.broken);
+            IActionResult markArmChair = administration.MarkArmChair(armChairId, roomId, StateArmChair.broken);
             Assert.IsType<NotFoundResult>(markArmChair);
         }
 
         [Fact]
         public void MarkArmChairRedirectTest()
         {
-            IActionResult markArmChair = administration.MarkArmChair("notEmptyOrNull", StateArmChair.ready);
+            IActionResult markArmChair = administration.MarkArmChair("notEmptyOrNull", "notEmptyOrNull", StateArmChair.ready);
             Assert.IsType<RedirectToActionResult>(markArmChair);
         }
 

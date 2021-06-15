@@ -213,8 +213,7 @@ namespace CinePlusXUnit.Mocks
             ArmChair armChair = new ArmChair()
             {
                 ArmChairId = armChairID,
-                No = 2,
-                StateArmChair = StateArmChair.ready
+                No = 2
             };
 
             ArmChairByRoom armChairByRoom = new ArmChairByRoom()
@@ -223,7 +222,10 @@ namespace CinePlusXUnit.Mocks
                 ArmChairId = armChairID,
                 ArmChair = armChair,
                 RoomId = room2ID,
-                Room = room2
+                Room = room2,
+                StateArmChair = StateArmChair.ready,
+                Show = show,
+                ShowId = show.ShowId
             };
 
             UserBoughtArmChair userBoughtArmChair = new UserBoughtArmChair()
@@ -325,6 +327,21 @@ namespace CinePlusXUnit.Mocks
         }
 
         public void DeletePay(Pay pay)
+        {
+            
+        }
+
+        public List<ArmChairByRoom> GetArmChairsByRoomById(string roomId, string showId)
+        {
+            return new List<ArmChairByRoom>();
+        }
+
+        public ArmChairByRoom GetArmChairByRoomById(string armChairId, string showId)
+        {
+            return new ArmChairByRoom();
+        }
+
+        public void UpdateArmChairByRoom(ArmChairByRoom armChairByRoom)
         {
             
         }
