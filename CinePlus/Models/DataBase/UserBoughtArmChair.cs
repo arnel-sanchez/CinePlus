@@ -26,8 +26,6 @@ namespace CinePlus.Models
 
         public Show Show { get; set; }
 
-        [Required]
-        [DataType(DataType.Text)]
         public string ShowId { get; set; }
     }
 }

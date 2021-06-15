@@ -118,8 +118,8 @@ namespace CinePlus.DataAccess
                 return _context.ArmChairByRoom
                     .Include(x => x.ArmChair)
                     .Include(x=>x.Room)
-                    .Where(x => x.RoomId == id)
-                    .OrderBy(x=>x.ArmChairId)
+                    .Where(x => x.Room.RoomId == id)
+                    .OrderBy(x=>x.ArmChair.No)
                     .ToList();
             }
             catch (Exception)
