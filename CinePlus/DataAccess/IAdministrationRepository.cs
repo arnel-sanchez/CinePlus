@@ -52,7 +52,7 @@ namespace CinePlus.DataAccess
 
         public void DeleteRoomById(string id);
 
-        public void MarkArmChairById(string id, StateArmChair state);
+        public void MarkArmChairByRoomIdAndArmChairId(string armChairId, string roomId, StateArmChair state);
 
         public void AddRoom(Room room);
 

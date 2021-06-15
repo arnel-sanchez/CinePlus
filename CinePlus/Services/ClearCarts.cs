@@ -28,8 +28,9 @@ namespace CinePlus.Services
             var cart = _cartRepository.GetCartsByDate(DateTime.Now);
             foreach (var item in cart)
             {
-                item.ArmChair.StateArmChair = Models.StateArmChair.ready;
-                _cartRepository.UpdateArmChair(item.ArmChair);
+                var armChairByRoom = _cartRepository.GetArmChairByRoomById(item.ArmChairId, item.DiscountsByShow.ShowId);
+                armChairByRoom.StateArmChair = StateArmChair.ready;
+                _cartRepository.UpdateArmChairByRoom(armChairByRoom);
                 _cartRepository.DeleteCartById(item.CartId);
                 _cartRepository.DeleteUserBoughtArmChairByShowIdAndUserIdAndArmChairId(item.DiscountsByShow.ShowId, item.UserId, item.ArmChairId);
                 _logger.LogInformation($"Se eliminó del carrito del usuario [{item.User.UserName}] el asiento {item.ArmChair.No}.");

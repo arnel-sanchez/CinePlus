@@ -54,10 +54,11 @@ namespace CinePlus.DataAccess
                 .FirstOrDefault();
         }
 
-        public ArmChairByRoom GetArmChairByRoomById(string armChairId)
+        public ArmChairByRoom GetArmChairByRoomById(string armChairId, string showId)
         {
             return _context.ArmChairByRoom
                 .Where(x => x.ArmChairId == armChairId)
+                .Where(x => x.ShowId == showId)
                 .FirstOrDefault();
         }
 
@@ -111,14 +112,15 @@ namespace CinePlus.DataAccess
                 .FirstOrDefault();
         }
 
-        public List<ArmChairByRoom> GetArmChairsByRoomById(string id)
+        public List<ArmChairByRoom> GetArmChairsByRoomById(string roomId, string showId)
         {
             try
             {
                 return _context.ArmChairByRoom
                     .Include(x => x.ArmChair)
                     .Include(x=>x.Room)
-                    .Where(x => x.Room.RoomId == id)
+                    .Where(x => x.Room.RoomId == roomId)
+                    .Where(x=>x.ShowId == showId)
                     .OrderBy(x=>x.ArmChair.No)
                     .ToList();
             }
@@ -136,9 +138,9 @@ namespace CinePlus.DataAccess
             _context.SaveChanges();
         }
 
-        public void UpdateArmChair(ArmChair armChair)
+        public void UpdateArmChairByRoom(ArmChairByRoom armChairByRoom)
         {
-            _context.ArmChair.Update(armChair);
+            _context.ArmChairByRoom.Update(armChairByRoom);
             _context.SaveChanges();
         }
 

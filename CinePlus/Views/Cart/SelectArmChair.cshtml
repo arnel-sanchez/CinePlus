@@ -8,7 +8,7 @@
 	<div class="card-deck">
 		@for (int i = 0; i < Model.ArmChairByRooms.Count; i++)
 		{
-			if (Model.ArmChairByRooms[i].ArmChair.StateArmChair == StateArmChair.sold)
+			if (Model.ArmChairByRooms[i].StateArmChair == StateArmChair.sold)
 			{
 				<div style="position: relative; width: 6rem;">
 					<img src="~/img/armchair.png" style="width: 6rem;" />
@@ -20,7 +20,7 @@
 					<h6>@(i + 1)</h6>
 				</div>
 			}
-			else if (Model.ArmChairByRooms[i].ArmChair.StateArmChair == StateArmChair.broken)
+			else if (Model.ArmChairByRooms[i].StateArmChair == StateArmChair.broken)
 			{
 				<div style="position: relative; width: 6rem;">
 					<img src="~/img/armchair.png" style="width: 6rem;" />

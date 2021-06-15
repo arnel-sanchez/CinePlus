@@ -292,14 +292,14 @@ namespace CinePlus.Controllers
                     ArmChair armChair = new ArmChair
                     {
                         ArmChairId = Guid.NewGuid().ToString(),
-                        No = i + 1,
-                        StateArmChair = StateArmChair.ready
+                        No = i + 1
                     };
                     ArmChairByRoom armChairByRoom = new ArmChairByRoom
                     {
                         ArmChairId = armChair.ArmChairId,
                         RoomId = room.RoomId,
-                        ArmChairByRoomId = Guid.NewGuid().ToString()
+                        ArmChairByRoomId = Guid.NewGuid().ToString(),
+                        StateArmChair = StateArmChair.ready
                     };
                     AdministrationRepository.AddArmChair(armChair);
                     AdministrationRepository.AddArmChairByRoom(armChairByRoom);
@@ -322,11 +322,11 @@ namespace CinePlus.Controllers
             return RedirectToAction("GetRooms");
         }
 
-        public IActionResult MarkArmChair(string id, StateArmChair state)
+        public IActionResult MarkArmChair(string armChairId, string roomId, StateArmChair state)
         {
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(armChairId) || string.IsNullOrEmpty(roomId))
                 return NotFound();
-            AdministrationRepository.MarkArmChairById(id, state);
+            AdministrationRepository.MarkArmChairByRoomIdAndArmChairId(armChairId, roomId, state);
             return RedirectToAction("GetRooms");
         }
         #endregion

@@ -82,7 +82,7 @@ namespace CinePlus.Controllers
             var res = new SelectArmChairResult
             {
                 Show = CartRepository.GetShowById(id),
-                ArmChairByRooms = CartRepository.GetArmChairsByRoomById(CartRepository.GetShowById(id).RoomId)
+                ArmChairByRooms = CartRepository.GetArmChairsByRoomById(CartRepository.GetShowById(id).RoomId, id)
             };
 
             return View(res);
@@ -97,13 +97,14 @@ namespace CinePlus.Controllers
                 return NotFound();
             }
             var discounts = CartRepository.GetDiscountsByShowId(showId);
-            return View("SelectDiscount", new Tuple<string, List<DiscountsByShow>>(armChairId, discounts));
+            return View("SelectDiscount", new Tuple<string, string, List<DiscountsByShow>>(armChairId, showId, discounts));
         }
         
         [Authorize]
-        public IActionResult SelectDiscount(string armChairId, string discountByShowId)
+        [HttpPost]
+        public IActionResult SelectDiscount(string armChairId, string showId,string discountByShowId)
         {
-            if (string.IsNullOrEmpty(armChairId) || string.IsNullOrEmpty(discountByShowId))
+            if (string.IsNullOrEmpty(armChairId) || string.IsNullOrEmpty(showId) || string.IsNullOrEmpty(discountByShowId))
             {
                 return NotFound();
             }
@@ -115,9 +116,9 @@ namespace CinePlus.Controllers
                 DiscountsByShowId = discountByShowId,
                 DateTime = DateTime.Now
             };
-            var armChair = CartRepository.GetArmChairById(armChairId);
-            armChair.StateArmChair = StateArmChair.sold;
-            CartRepository.UpdateArmChair(armChair);
+            var armChairByRoom = CartRepository.GetArmChairByRoomById(armChairId, showId);
+            armChairByRoom.StateArmChair = StateArmChair.sold;
+            CartRepository.UpdateArmChairByRoom(armChairByRoom);
             CartRepository.AddCart(cart);
             var discounstByShow = CartRepository.GetDiscountByShowById(discountByShowId);
             var userBouthArmChair = new UserBoughtArmChair
@@ -126,7 +127,7 @@ namespace CinePlus.Controllers
                 Show = discounstByShow.Show,
                 UserBoughtArmChairId = Guid.NewGuid().ToString(),
                 UserId = UserManager.FindByNameAsync(User.Identity.Name).Result.Id,
-                ArmChairByRoomId = CartRepository.GetArmChairByRoomById(armChairId).ArmChairByRoomId
+                ArmChairByRoomId = CartRepository.GetArmChairByRoomById(armChairId, showId).ArmChairByRoomId
             };
             CartRepository.AddUserBoughtArmChair(userBouthArmChair);
             return RedirectToAction("SelectArmChair", new Dictionary<string, string> { { "id", discounstByShow.ShowId } });
@@ -140,9 +141,9 @@ namespace CinePlus.Controllers
                 return NotFound();
             }
             var cart = CartRepository.GetCartById(id);
-            var armChair = CartRepository.GetArmChairById(cart.ArmChairId);
-            armChair.StateArmChair = StateArmChair.ready;
-            CartRepository.UpdateArmChair(armChair);
+            var armChairByRoom = CartRepository.GetArmChairByRoomById(cart.ArmChairId, cart.DiscountsByShow.ShowId);
+            armChairByRoom.StateArmChair = StateArmChair.ready;
+            CartRepository.UpdateArmChairByRoom(armChairByRoom);
             CartRepository.DeleteUserBoughtArmChairByShowIdAndUserIdAndArmChairId(cart.DiscountsByShow.ShowId, cart.UserId, cart.ArmChairId);
             CartRepository.DeleteCartById(id);
             return RedirectToAction("Index");
@@ -189,7 +190,7 @@ namespace CinePlus.Controllers
                 CartRepository.AddPayCart(payCart);
                 foreach (var item in res)
                 {
-                    var armChairByRoom = CartRepository.GetArmChairByRoomById(item.ArmChairId);
+                    var armChairByRoom = CartRepository.GetArmChairByRoomById(item.ArmChairId, item.DiscountsByShow.ShowId);
                     var userBoughtArmChair = CartRepository.GetUserBoughtArmChair(item.DiscountsByShow.ShowId, user.Id, armChairByRoom.ArmChairByRoomId);
                     var pay = new Pay
                     {
@@ -249,7 +250,7 @@ namespace CinePlus.Controllers
             CartRepository.AddPayCart(payCart);
             foreach (var item in res)
             {
-                var armChairByRoom = CartRepository.GetArmChairByRoomById(item.ArmChairId);
+                var armChairByRoom = CartRepository.GetArmChairByRoomById(item.ArmChairId, item.DiscountsByShow.ShowId);
                 var userBoughtArmChair = CartRepository.GetUserBoughtArmChair(item.DiscountsByShow.ShowId, user.Id, armChairByRoom.ArmChairByRoomId);
                 var pay = new Pay
                 {
@@ -316,8 +317,8 @@ namespace CinePlus.Controllers
             CartRepository.DeletePayCart(payCart);
             foreach (var item in pays)
             {
-                item.UserBoughtArmChair.ArmChairByRoom.ArmChair.StateArmChair = StateArmChair.ready;
-                CartRepository.UpdateArmChair(item.UserBoughtArmChair.ArmChairByRoom.ArmChair);
+                item.UserBoughtArmChair.ArmChairByRoom.StateArmChair = StateArmChair.ready;
+                CartRepository.UpdateArmChairByRoom(item.UserBoughtArmChair.ArmChairByRoom);
                 CartRepository.DeletePay(item);
             }
             return RedirectToAction("GetPayCarts");

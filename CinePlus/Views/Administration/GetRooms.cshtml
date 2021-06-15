@@ -37,7 +37,7 @@
 		<div class="card-deck">
 			@for (int i = 0; i < Model.ArmChairByRooms.Count; i++)
 			{
-				if (Model.ArmChairByRooms[i].ArmChair.StateArmChair == StateArmChair.sold)
+				if (Model.ArmChairByRooms[i].StateArmChair == StateArmChair.sold)
 				{
 					<div style="position: relative; width: 6rem;">
 						<img src="~/img/armchair.png" style="width: 6rem;" />
@@ -49,7 +49,7 @@
 						<h6>@(i + 1)</h6>
 					</div>
 				}
-				else if (Model.ArmChairByRooms[i].ArmChair.StateArmChair == StateArmChair.broken)
+				else if (Model.ArmChairByRooms[i].StateArmChair == StateArmChair.broken)
 				{
 					<div style="position: relative; width: 6rem;">
 						<a style="width: 6rem;" data-target="@string.Concat("#modal",Model.ArmChairByRooms[i].ArmChair.No)" data-toggle="modal" data-dismiss="modal">
@@ -133,7 +133,7 @@
 
 @foreach (var item in Model.ArmChairByRooms)
 {
-	if (item.ArmChair.StateArmChair != StateArmChair.sold)
+	if (item.StateArmChair != StateArmChair.sold)
 	{
 		<div class="modal fade" id="@string.Concat("modal",item.ArmChair.No)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
@@ -145,10 +145,11 @@
 					<form asp-action="MarkArmChair" asp-controller="Administration">
 						<div class="modal-body">
 							<div class="mb-3">
-								<input hidden name="id" value="@item.ArmChairId"/>
+								<input hidden name="armChairId" value="@item.ArmChairId" />
+								<input hidden name="roomId" value="@item.RoomId" />
 								<label class="col-form-label">Estado</label>
 								<select class="custom-select" name="state">
-									@if (item.ArmChair.StateArmChair == StateArmChair.broken)
+									@if (item.StateArmChair == StateArmChair.broken)
 									{
 										<option selected value="@StateArmChair.broken">Rota</option>
 										<option value="@StateArmChair.ready">En Buen Estado</option>

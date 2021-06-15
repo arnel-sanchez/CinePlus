@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace CinePlus.Models
 {
-    public enum StateArmChair { ready, broken, sold}
-
     public class ArmChair
     {
         [Required]
@@ -16,8 +14,5 @@ namespace CinePlus.Models
 
         [Required]
         public int No { get; set; }
-
-        [Required]
-        public StateArmChair StateArmChair { get; set; }
     }
 }

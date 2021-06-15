@@ -339,26 +339,6 @@ namespace CinePlus.Services
                     Name = "Principal",
                     NoArmChairs = 200
                 };
-                for (int i = 0; i < 200; i++)
-                {
-                    var armChair = new ArmChair
-                    {
-                        ArmChairId = Guid.NewGuid().ToString(),
-                        No = i+1,
-                        StateArmChair = StateArmChair.ready,
-                    };
-                    var armChairByRoom = new ArmChairByRoom
-                    {
-                        ArmChair = armChair,
-                        ArmChairByRoomId = Guid.NewGuid().ToString(),
-                        ArmChairId = armChair.ArmChairId,
-                        Room = room,
-                        RoomId = room.RoomId
-                    };
-                    context.ArmChair.Add(armChair);
-                    context.ArmChairByRoom.Add(armChairByRoom);
-                    context.SaveChanges();
-                }
                 var discount1 = new Discount
                 {
                     DiscountId = Guid.NewGuid().ToString(),
@@ -371,7 +351,7 @@ namespace CinePlus.Services
                     Name = "Ninguno",
                     Percent = 0
                 };
-                var show = new Show
+                var show1 = new Show
                 {
                     Room = room,
                     RoomId = room.RoomId,
@@ -387,26 +367,26 @@ namespace CinePlus.Services
                     Discount = discount1,
                     DiscountId = discount1.DiscountId,
                     DiscountsByShowId = Guid.NewGuid().ToString(),
-                    Show = show,
-                    ShowId = show.ShowId
+                    Show = show1,
+                    ShowId = show1.ShowId
                 };
                 var discountByShow2 = new DiscountsByShow
                 {
                     Discount = discount2,
                     DiscountId = discount2.DiscountId,
                     DiscountsByShowId = Guid.NewGuid().ToString(),
-                    Show = show,
-                    ShowId = show.ShowId
+                    Show = show1,
+                    ShowId = show1.ShowId
                 };
 
                 context.Discount.Add(discount1);
                 context.Discount.Add(discount2);
-                context.Show.Add(show);
+                context.Show.Add(show1);
                 context.DiscountsByShow.Add(discountByShow1);
                 context.DiscountsByShow.Add(discountByShow2);
                 context.SaveChanges();
 
-                show = new Show
+                var show2 = new Show
                 {
                     Room = room,
                     RoomId = room.RoomId,
@@ -422,24 +402,24 @@ namespace CinePlus.Services
                     Discount = discount1,
                     DiscountId = discount1.DiscountId,
                     DiscountsByShowId = Guid.NewGuid().ToString(),
-                    Show = show,
-                    ShowId = show.ShowId
+                    Show = show2,
+                    ShowId = show2.ShowId
                 };
                 discountByShow2 = new DiscountsByShow
                 {
                     Discount = discount2,
                     DiscountId = discount2.DiscountId,
                     DiscountsByShowId = Guid.NewGuid().ToString(),
-                    Show = show,
-                    ShowId = show.ShowId
+                    Show = show2,
+                    ShowId = show2.ShowId
                 };
 
-                context.Show.Add(show);
+                context.Show.Add(show2);
                 context.DiscountsByShow.Add(discountByShow1);
                 context.DiscountsByShow.Add(discountByShow2);
                 context.SaveChanges();
 
-                show = new Show
+                var show3 = new Show
                 {
                     Room = room,
                     RoomId = room.RoomId,
@@ -455,24 +435,24 @@ namespace CinePlus.Services
                     Discount = discount1,
                     DiscountId = discount1.DiscountId,
                     DiscountsByShowId = Guid.NewGuid().ToString(),
-                    Show = show,
-                    ShowId = show.ShowId
+                    Show = show3,
+                    ShowId = show3.ShowId
                 };
                 discountByShow2 = new DiscountsByShow
                 {
                     Discount = discount2,
                     DiscountId = discount2.DiscountId,
                     DiscountsByShowId = Guid.NewGuid().ToString(),
-                    Show = show,
-                    ShowId = show.ShowId
+                    Show = show3,
+                    ShowId = show3.ShowId
                 };
 
-                context.Show.Add(show);
+                context.Show.Add(show3);
                 context.DiscountsByShow.Add(discountByShow1);
                 context.DiscountsByShow.Add(discountByShow2);
                 context.SaveChanges();
 
-                show = new Show
+                var show4 = new Show
                 {
                     Room = room,
                     RoomId = room.RoomId,
@@ -488,24 +468,24 @@ namespace CinePlus.Services
                     Discount = discount1,
                     DiscountId = discount1.DiscountId,
                     DiscountsByShowId = Guid.NewGuid().ToString(),
-                    Show = show,
-                    ShowId = show.ShowId
+                    Show = show4,
+                    ShowId = show4.ShowId
                 };
                 discountByShow2 = new DiscountsByShow
                 {
                     Discount = discount2,
                     DiscountId = discount2.DiscountId,
                     DiscountsByShowId = Guid.NewGuid().ToString(),
-                    Show = show,
-                    ShowId = show.ShowId
+                    Show = show4,
+                    ShowId = show4.ShowId
                 };
 
-                context.Show.Add(show);
+                context.Show.Add(show4);
                 context.DiscountsByShow.Add(discountByShow1);
                 context.DiscountsByShow.Add(discountByShow2);
                 context.SaveChanges();
 
-                show = new Show
+                var show5 = new Show
                 {
                     Room = room,
                     RoomId = room.RoomId,
@@ -521,22 +501,94 @@ namespace CinePlus.Services
                     Discount = discount1,
                     DiscountId = discount1.DiscountId,
                     DiscountsByShowId = Guid.NewGuid().ToString(),
-                    Show = show,
-                    ShowId = show.ShowId
+                    Show = show5,
+                    ShowId = show5.ShowId
                 };
                 discountByShow2 = new DiscountsByShow
                 {
                     Discount = discount2,
                     DiscountId = discount2.DiscountId,
                     DiscountsByShowId = Guid.NewGuid().ToString(),
-                    Show = show,
-                    ShowId = show.ShowId
+                    Show = show5,
+                    ShowId = show5.ShowId
                 };
 
-                context.Show.Add(show);
+                context.Show.Add(show5);
                 context.DiscountsByShow.Add(discountByShow1);
                 context.DiscountsByShow.Add(discountByShow2);
                 context.SaveChanges();
+
+                for (int i = 0; i < 200; i++)
+                {
+                    var armChair = new ArmChair
+                    {
+                        ArmChairId = Guid.NewGuid().ToString(),
+                        No = i + 1
+                    };
+                    var armChairByRoom1 = new ArmChairByRoom
+                    {
+                        ArmChair = armChair,
+                        ArmChairByRoomId = Guid.NewGuid().ToString(),
+                        ArmChairId = armChair.ArmChairId,
+                        Room = room,
+                        RoomId = room.RoomId,
+                        StateArmChair = StateArmChair.ready,
+                        ShowId = show1.ShowId,
+                        Show = show1
+                    };
+                    var armChairByRoom2 = new ArmChairByRoom
+                    {
+                        ArmChair = armChair,
+                        ArmChairByRoomId = Guid.NewGuid().ToString(),
+                        ArmChairId = armChair.ArmChairId,
+                        Room = room,
+                        RoomId = room.RoomId,
+                        StateArmChair = StateArmChair.ready,
+                        ShowId = show2.ShowId,
+                        Show = show2
+                    };
+                    var armChairByRoom3 = new ArmChairByRoom
+                    {
+                        ArmChair = armChair,
+                        ArmChairByRoomId = Guid.NewGuid().ToString(),
+                        ArmChairId = armChair.ArmChairId,
+                        Room = room,
+                        RoomId = room.RoomId,
+                        StateArmChair = StateArmChair.ready,
+                        ShowId = show3.ShowId,
+                        Show = show3
+                    };
+                    var armChairByRoom4 = new ArmChairByRoom
+                    {
+                        ArmChair = armChair,
+                        ArmChairByRoomId = Guid.NewGuid().ToString(),
+                        ArmChairId = armChair.ArmChairId,
+                        Room = room,
+                        RoomId = room.RoomId,
+                        StateArmChair = StateArmChair.ready,
+                        ShowId = show4.ShowId,
+                        Show = show4
+                    };
+                    var armChairByRoom5 = new ArmChairByRoom
+                    {
+                        ArmChair = armChair,
+                        ArmChairByRoomId = Guid.NewGuid().ToString(),
+                        ArmChairId = armChair.ArmChairId,
+                        Room = room,
+                        RoomId = room.RoomId,
+                        StateArmChair = StateArmChair.ready,
+                        ShowId = show5.ShowId,
+                        Show = show5
+                    };
+
+                    context.ArmChair.Add(armChair);
+                    context.ArmChairByRoom.Add(armChairByRoom1);
+                    context.ArmChairByRoom.Add(armChairByRoom2);
+                    context.ArmChairByRoom.Add(armChairByRoom3);
+                    context.ArmChairByRoom.Add(armChairByRoom4);
+                    context.ArmChairByRoom.Add(armChairByRoom5);
+                    context.SaveChanges();
+                }
             }
         }
     }

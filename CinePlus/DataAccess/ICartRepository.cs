@@ -10,7 +10,7 @@ namespace CinePlus.DataAccess
     {
         public Show GetShowById(string id);
 
-        public List<ArmChairByRoom> GetArmChairsByRoomById(string id);
+        public List<ArmChairByRoom> GetArmChairsByRoomById(string roomId, string showId);
 
         public void AddCart(Cart cart);
 
@@ -30,11 +30,11 @@ namespace CinePlus.DataAccess
 
         public void UdateRestPointsPartner(string userId, double points);
 
-        public ArmChairByRoom GetArmChairByRoomById(string armChairId);
+        public ArmChairByRoom GetArmChairByRoomById(string armChairId, string showId);
 
         public void AddArmChairByRoom(ArmChairByRoom armChairByRoom);
 
-        public void UpdateArmChair(ArmChair armChair);
+        public void UpdateArmChairByRoom(ArmChairByRoom armChairByRoom);
 
         public ArmChair GetArmChairById(string id);
 

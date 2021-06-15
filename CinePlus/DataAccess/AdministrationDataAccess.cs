@@ -95,7 +95,21 @@ namespace CinePlus.DataAccess
         public List<ArmChairByRoom> GetArmChairByRoom()
         {
             var room = _context.Room.FirstOrDefault();
-            return _context.ArmChairByRoom.Include(x => x.ArmChair).Where(x => x.RoomId == room.RoomId).OrderBy(x=>x.ArmChair.No).ToList();
+            var res = _context.ArmChairByRoom
+                .Include(x => x.ArmChair)
+                .Where(x => x.RoomId == room.RoomId)
+                .OrderBy(x=>x.ArmChair.No)
+                .ToList();
+            var query =
+                from armChair in res
+                group armChair by armChair.ArmChair.No;
+            var list = new List<ArmChairByRoom>();
+            foreach (var item in query)
+            {
+                var temp = item.ElementAt(0);
+                list.Add(temp);
+            }
+            return list;
         }
 
         public List<ArmChairByRoom> GetArmChairByRoom(string id)
@@ -199,11 +213,14 @@ namespace CinePlus.DataAccess
                 .ToList();
         }
 
-        public void MarkArmChairById(string id, StateArmChair state)
+        public void MarkArmChairByRoomIdAndArmChairId(string armChairId, string roomId, StateArmChair state)
         {
-            var armChair = _context.ArmChair.Where(x => x.ArmChairId == id).FirstOrDefault();
-            armChair.StateArmChair = state;
-            _context.ArmChair.Update(armChair);
+            var armChair = _context.ArmChairByRoom.Where(x => x.ArmChairId == armChairId && x.RoomId==roomId).ToList();
+            foreach (var item in armChair)
+            {
+                item.StateArmChair = state;
+                _context.ArmChairByRoom.Update(item);
+            }
             _context.SaveChanges();
         }
 
